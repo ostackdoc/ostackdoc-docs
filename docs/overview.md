@@ -57,7 +57,33 @@ A minimum of **10 GB** of disk space is sufficient for holding the OpenStack-Ans
 Disk space requirements depend on the total number of instances running on each host and the amount of disk space allocated to each instance.
 
 !!! Tip
-    Consider disks that provide higher I/O throughput with lower latency, such as SSD drives in a RAID array if you use the local storage of the compute host for instance storage. 
+    Consider disks that provide higher I/O throughput with lower latency, such as SSD drives in a RAID array if you use the local storage of the compute host for instance storage.
 
 !!! note
     If your deployment include a shared storage like Ceph you will  definitely be  using it in the compute host without using the local storage  of the compute host for instance storage. In this case the local disk of the compute host required for host OS installation and relevant OpenStack agent installation requirements.
+
+#### Storage hosts
+
+Hosts running the Block Storage (cinder) service often consume the most disk space in OpenStack environments.
+
+!!! Tip
+    As with Compute hosts, choose disks that provide the highest I/O throughput with the lowest latency.
+
+#### Logging hosts
+
+An OpenStack-Ansible deployment generates a significant amount of log information. Logs come from a variety of sources, including services running in containers, the containers themselves, and the physical hosts. Logging hosts need sufficient disk space to hold live and rotated (historical) log files. In addition, the storage performance must be able to keep pace with the log traffic coming from various hosts and containers within the OpenStack environment. Reserve a minimum of **50 GB**  of disk space for storing logs on the logging hosts.
+
+### Network Recommendations
+
+For the best performance, reliability, and scalability in a production environment, consider a network configuration that contains the following features:
+
+* Bonded network interfaces, which increase performance, reliability, or both (depending on the bonding architecture)
+
+* VLAN offloading, which increases performance by adding and removing VLAN tags in hardware, rather than in the server’s main CPU
+
+* 10 Gigabit Ethernet, which supports higher network speeds and can also improve storage performance when using the Block Storage service
+
+* Jumbo frames, which increase network performance by allowing more data to be sent in each packet
+
+!!!  Note
+    You can deploy an OpenStack environment with only one physical network interface. This works for small test environments, but it can cause problems when your environment grows.
