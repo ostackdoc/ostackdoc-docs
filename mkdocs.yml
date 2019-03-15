@@ -52,3 +52,9 @@ markdown_extensions:
       permalink: true
       baselevel: 2
       separator: "_"
+plugins:
+  - pdf-export:
+      verbose: true
+      media_type: print
+      enabled_if_env: ENABLE_PDF_EXPORT
+extra_css: [extra.css]
