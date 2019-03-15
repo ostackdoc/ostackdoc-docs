@@ -33,13 +33,13 @@ Since we  require advanced networking and storage features such as; LVM, RAID, m
 We assume that your OpenStack Ansible host has two network interface cards. We are planning our network like below
 
 **1\.** Configure one network card for accessing the Internet
- Network:
+
  ```
- 192.168.10.0/24
+ Network: 192.168.10.0/24
  ```
 
 **2\.** Configure the other network card for accessing our OpenStack deployment management network.
-Network:
+
 ```
-172.29.236.0/24
+Network: 172.29.236.0/24
 ```
