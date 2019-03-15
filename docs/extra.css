@@ -1,17 +1,17 @@
 @page {
     size: a4 portrait;
-    margin: 25mm 10mm 25mm 10mm;
+    margin: 10mm 10mm 10mm 10mm;
     counter-increment: page;
     font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
     white-space: pre;
     color: color;
-    @top-left {
+    @bottom-left {
         content: '© 2018 - 2019 Chinthaka Deshapriya';
     }
     @top-center {
         content: string(chapter);
     }
-    @top-right {
+    @bottom-right {
         content: 'Page ' counter(page);
     }
 }
