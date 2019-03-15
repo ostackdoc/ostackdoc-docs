@@ -37,3 +37,9 @@ Ensure that all hosts within an OpenStack-Ansible (OSA) environment meet the fol
 
 !!! Note
     At the moment of writing this guid, the openstacl-ansible playbook deployment on CentOS 7.x and openSUSE Leap 42.x is **experimental**. We highly recommend using Ubuntu in your production deployment.
+
+### CPU Recommendation
+
+* Compute hosts should have multicore processors with [hardware-assisted virtualization extensions](https://en.wikipedia.org/wiki/Hardware-assisted_virtualization). These extensions provide a significant performance boost and improve security in virtualized environments.
+
+* Infrastructure (control plane) hosts should have multicore processors for best performance. Some services, such as MySQL, benefit from additional CPU cores and other technologies, such as [Hyper-threading](https://en.wikipedia.org/wiki/Hyper-threading).
