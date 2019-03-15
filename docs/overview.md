@@ -36,4 +36,4 @@ Ensure that all hosts within an OpenStack-Ansible (OSA) environment meet the fol
 - en_US.UTF-8 as the locale
 
 !!! Note
-    At the moment of writing this guid, the openstacl-ansible playbook deployment on CentOS 7.x and openSUSE Leap 42.x is "experimental". We highly recommend using Ubuntu in your production deployment.
+    At the moment of writing this guid, the openstacl-ansible playbook deployment on CentOS 7.x and openSUSE Leap 42.x is **experimental**. We highly recommend using Ubuntu in your production deployment.
