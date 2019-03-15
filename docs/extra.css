@@ -4,7 +4,7 @@
     counter-increment: page;
     font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
     white-space: pre;
-    color: rgb;
+    color: color;
     @top-left {
         content: '© 2018 - 2019 Chinthaka Deshapriya';
     }
