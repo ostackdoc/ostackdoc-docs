@@ -16,16 +16,16 @@ The following diagram shows the general workflow of an OpenStack-Ansible install
 Ensure that all hosts within an OpenStack-Ansible (OSA) environment meet the following minimum requirements:
 
 * Ubuntu
-  + Ubuntu 16.04 LTS (Xenial Xerus) or Ubuntu 18.04 LTS (Bionic Beaver)
-  + Linux kernel version 3.13.0-34-generic or later is required.
+    + Ubuntu 16.04 LTS (Xenial Xerus) or Ubuntu 18.04 LTS (Bionic Beaver)
+    + Linux kernel version 3.13.0-34-generic or later is required.
 
 * CentOS
-  + Centos 7, fully updated.
-  + Linux kernel version 3.10.0 or later.
+    + Centos 7, fully updated.
+    + Linux kernel version 3.10.0 or later.
 
 * openSUSE
-  + Leap 42.X, fully updated.
-  + Linux kernel version 4.4.X or later.
+    + Leap 42.X, fully updated.
+    + Linux kernel version 4.4.X or later.
 
 - Secure Shell (SSH) client and server that support public key authentication
 
