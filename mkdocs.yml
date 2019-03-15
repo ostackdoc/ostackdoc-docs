@@ -34,11 +34,12 @@ extra:
       link: 'https://linkedin.com/in/ostackdoc'
 nav:
 - 'Introduction': 'index.md'
+- 'Overview': 'overview.md'
 - 'Test Environment Example': 'test-env-example.md'
 - 'Preparing OpenStack Nodes':
   - 'Installing Node OS': 'install-node-os.md'
   - 'Configuring Node Network': 'configure-node-network.md'
-  
+
 # Google Analytics
 google_analytics: ['UA-136248088-1', 'ostackdoc.github.io']
 # Extensions
