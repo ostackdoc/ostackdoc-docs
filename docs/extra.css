@@ -7,11 +7,14 @@
     color: color;
     @bottom-left {
         content: '© 2018 - 2019 Chinthaka Deshapriya';
+        font-size: 10px;
     }
     @top-center {
         content: string(chapter);
+        font-size: 12px;
     }
     @bottom-right {
         content: 'Page ' counter(page);
+        font-size: 10px;
     }
 }
