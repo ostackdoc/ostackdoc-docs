@@ -59,7 +59,7 @@ Disk space requirements depend on the total number of instances running on each 
 !!! Tip
     Consider disks that provide higher I/O throughput with lower latency, such as SSD drives in a RAID array if you use the local storage of the compute host for instance storage.
 
-!!! note
+!!! Note
     If your deployment include a shared storage like Ceph you will  definitely be  using it in the compute host without using the local storage  of the compute host for instance storage. In this case the local disk of the compute host required for host OS installation and relevant OpenStack agent installation requirements.
 
 #### Storage hosts
@@ -85,5 +85,5 @@ For the best performance, reliability, and scalability in a production environme
 
 * Jumbo frames, which increase network performance by allowing more data to be sent in each packet
 
-!!!  Note
+!!! Note
     You can deploy an OpenStack environment with only one physical network interface. This works for small test environments, but it can cause problems when your environment grows.
