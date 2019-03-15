@@ -8,3 +8,5 @@ Since this guide has been prepared using **Ubuntu Linux 18.04 LTS** operating sy
     When you install OpenStack in a production environment, we recommend using a separate deployment host that contains Ansible and orchestrates the OpenStack-Ansible (OSA) installation on the target hosts.
 
     In a test environment, we recommend using one of the infrastructure target hosts as the deployment host.
+
+To use a target host as a deployment host, follow the steps in [Prepare the target hosts](/prepare-the-target-hosts/) on the deployment host.
