@@ -35,6 +35,7 @@ extra:
 nav:
 - 'Introduction': 'index.md'
 - 'Overview': 'overview.md'
+- 'Prepare Deployment Host': 'prepare-deployment-host.md'
 - 'Test Environment Example': 'test-env-example.md'
 - 'Preparing OpenStack Nodes':
   - 'Installing Node OS': 'install-node-os.md'
