@@ -48,4 +48,6 @@ markdown_extensions:
   - codehilite:
       guess_lang: false
   - toc:
-      permalink: true
+      permalink: "#"
+      baselevel: 2
+      separator: "_"
