@@ -85,5 +85,5 @@ For the best performance, reliability, and scalability in a production environme
 
 * Jumbo frames, which increase network performance by allowing more data to be sent in each packet
 
-!!! Note
+!!! Warning 
     You can deploy an OpenStack environment with only one physical network interface. This works for small test environments, but it can cause problems when your environment grows.
