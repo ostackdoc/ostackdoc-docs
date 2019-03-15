@@ -34,9 +34,9 @@ We assume that your OpenStack Ansible host has two network interface cards. We a
 
 **1\.** Configure one network card for accessing the Internet
 
- ```
- Network: 192.168.10.0/24
- ```
+```
+Network: 192.168.10.0/24
+```
 
 **2\.** Configure the other network card for accessing our OpenStack deployment management network.
 
