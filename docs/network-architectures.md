@@ -154,7 +154,6 @@ iface br-vxlan inet static
 #    bridge_waitport 0
 #    bridge_fd 0
 #    bridge_ports bond0
-
 # compute1 Network VLAN bridge
 #auto br-vlan
 #iface br-vlan inet manual
@@ -162,7 +161,6 @@ iface br-vxlan inet static
 #    bridge_waitport 0
 #    bridge_fd 0
 #
-
 # Storage bridge (optional)
 #
 # Only the COMPUTE and STORAGE nodes must have an IP address
@@ -199,6 +197,8 @@ The following diagram demonstrates hosts using multiple interfaces:
 The following diagram demonstrates hosts using multiple bonds:
 
 ![](img/multiple-interfaces.jpg)
+
+### Multiple Bond Sample Network Configuration
 
 !!! Note
 
