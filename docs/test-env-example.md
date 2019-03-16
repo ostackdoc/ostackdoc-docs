@@ -25,8 +25,8 @@ The following CIDR and VLAN assignments are used for this environment.
 **Network**	           |        **CIDR**	   | **VLAN**
 -----------------------|---------------------|-------------
 Management Network     |	`172.29.236.0/22`	 | `10`
-Tunnel (VXLAN) Network | 	'172.29.240.0/22   |`	30
-Storage Network        |	`172.29.244.0/22`  |	20
+Tunnel (VXLAN) Network | 	'172.29.240.0/22   | `30`
+Storage Network        |	`172.29.244.0/22`  |	`20`
 
 ## IP Assignments
 
@@ -36,7 +36,7 @@ The following host name and IP address assignments are used for this environment
 --------------|--------------------|--------------------------|--------------
 infra1        |	`172.29.236.11`    |	`172.29.240.11`  	      | `172.29.244.11`
 compute1	    | `172.29.236.12'    |	`172.29.240.12`         |	`172.29.244.12`
-storage1	    | `172.29.236.13`    |	                        | `172.29.244.13`
+storage1	    | `172.29.236.13`    |	 `-`                    | `172.29.244.13`
 
 # Configuring the Operating System
 
