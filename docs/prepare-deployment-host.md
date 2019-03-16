@@ -37,12 +37,13 @@ We assume that your OpenStack Ansible host has two network interface cards. We a
 ```
 Network: 192.168.10.0/24
 ```
-
 **2\.** Configure the other network card for accessing our OpenStack deployment management network.
 
 ```
 Network: 172.29.236.0/24
 ```
+#### Changing `netplan` to `ifupdown`
+
 The classic `ifupdown` network configuration used in Debian/Ubuntu  has been replaced by `netplan` on Ubuntu 18.04 server system.
 
 You can view the current `netplan` configuration using  the command below. You may have a different name for your `YML` as per your installation environment.
@@ -62,13 +63,7 @@ network:
     enp0s3:
       dhcp4: yes
 ```
-
-
-
-
-
-
-# /etc/netplan for current configuration.
-# To re-enable ifupdown on this system, you can run:
-#    sudo apt install ifupdown
-~                                                
+** To re-enable `ifupdown` on this system, run:
+```
+sudo apt install ifupdown
+```                                        
