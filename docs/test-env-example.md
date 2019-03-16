@@ -453,3 +453,62 @@ Reboot the system
 ```
 sudo systemctl reboot
 ```
+## Configure SSH keys
+
+Ansible uses SSH to connect the deployment host and target hosts.
+
+In this test environment we use `infra1` host as  our `OpenStack-ansible` host we will create a `ssh` key pair as the root user and propagate the public key of the root user to `compute1` and `storage1` hosts.
+
+**1\.** 'Run the following command as `root` user in `infra1` host
+
+```
+sudo su -
+ssh-keygen -t rsa
+```
+Press `Enter` key to create our keys without a passphrase
+
+You will get an output like below.
+
+```
+root@guru:~# ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:WpPMnxdgptMOBoV+qcSgO8qQDWZjtEtfmsB08A5Zr6s root@guru
+The key's randomart image is:
++---[RSA 2048]----+
+| ...   ..        |
+| o+.o ..         |
+|+ooo =.  .+      |
+|.X+ ..++o* .     |
+|=+=++. oS . .    |
+|o.++. .+ * . .   |
+|o. o  .   + .    |
+|...        .     |
+| E               |
++----[SHA256]-----+
+```
+
+**2\.** Copy the keys to compute1 and storage1 hosts.
+```
+ssh-copy-id root@compute1
+ssh-copy-id root@Storage1
+```
+
+!!! Note
+    We assume that  you have configured your DNS or at least `/etc/hosts` file to resolve hostnames
+
+**3\.** Test it
+```
+ssh root@compute1
+ssh root@Storage1
+```
+
+
+
+
+If you can connect and get the shell without authenticating, it is working. SSH provides a shell without asking for a password.
