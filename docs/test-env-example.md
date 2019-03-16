@@ -12,6 +12,21 @@ The following figure depicts this test environment and its components.
 
 ![](img/openstack-test-env-v1.jpg)
 
+## Configuring the network
+
+OpenStack-Ansible uses bridges to connect physical and logical network interfaces on the host to virtual network interfaces within containers. Target hosts need to be configured with the following network bridges:
+
+
+**Bridge name**| **Best configured on** |	**With a static IP***
+-----------|-------------------|-------------------
+br-mgmt	|On every node |	Always
+br-storage |	On every storage node |	When component is deployed on metal
+           | On every compute node	| Always
+br-vxlan	  | On every network node	 | When component is deployed on metal
+            | On every compute node| Always
+br-vlan	    | On every network node|	Never
+            | On every compute node| Never
+
 ## Network Architecture
 
 In our test environment each has a dual port Ethernet card and we will configure our test environment network as a multiple interfaces as depicted by the diagram below.
@@ -469,7 +484,11 @@ Press `Enter` key to create our keys without a passphrase
 
 You will get an output like below.
 
-```
+```Note
+
+OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
+
+
 root@guru:~# ssh-keygen -t rsa
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
@@ -505,9 +524,21 @@ ssh-copy-id root@Storage1
 **3\.** Test it
 ```
 ssh root@compute1
-ssh root@Storage1
+ssh root@Storage1Note
+
+OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
+
+Note
+
+OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
+
+
 ```
 If you can connect and get the shell without authenticating, it is working. SSH provides a shell without asking for a password.
 
 !!! Important
     OpenStack-Ansible deployments require the presence of a `/root/.ssh/id_rsa.pub` file on the deployment host. The contents of this file is inserted into an `authorized_keys` file for the containers, which is a necessary step for the Ansible playbooks. You can override this behavior by setting the `lxc_container_ssh_key` variable to the public key for the container.
+
+## Configuring The storage
+
+Logical Volume Manager (LVM) enables a single device to be split into multiple logical volumes that appear as a physical storage device to the operating system. The Block Storage (cinder) service, and LXC containers that optionally run the OpenStack infrastructure, can optionally use LVM for their data storage.
