@@ -43,3 +43,32 @@ Network: 192.168.10.0/24
 ```
 Network: 172.29.236.0/24
 ```
+The classic `ifupdown` network configuration used in Debian/Ubuntu  has been replaced by `netplan` on Ubuntu 18.04 server system.
+
+You can view the current `netplan` configuration using  the command below. You may have a different name for your `YML` as per your installation environment.
+
+```
+cat /etc/netplan/01-netcfg.yaml
+```
+
+You will get an output like below.
+```
+# This file describes the network interfaces available on your system
+# For more information, see netplan(5).
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      dhcp4: yes
+```
+
+
+
+
+
+
+# /etc/netplan for current configuration.
+# To re-enable ifupdown on this system, you can run:
+#    sudo apt install ifupdown
+~                                                
