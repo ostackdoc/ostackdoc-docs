@@ -7,8 +7,8 @@ The default networks used in an OpenStack-Ansible in this deployment can be obse
 
 **Network**       |	**CIDR**          | **VLAN**
 ------------------|-------------------|-------------
-Management Network|	`172.25.236.0/22` | `10`
-Overlay Network 	| `172.25.240.0/22`	| `30`  
+Management Network|	`172.29.236.0/22` | `10`
+Overlay Network 	| `172.29.240.0/22`	| `30`  
 Storage Network	  | `172.29.244.0/22` |	`20`
 
 !!! Note
