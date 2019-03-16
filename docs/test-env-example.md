@@ -25,8 +25,8 @@ The following CIDR and VLAN assignments are used for this environment.
 **Network**	           |        **CIDR**	   | **VLAN**
 -----------------------|---------------------|-------------
 Management Network     |	`172.29.236.0/22`	 | `10`
-Tunnel (VXLAN) Network | 	'172.29.240.0/22   | `30`
-Storage Network        |	`172.29.244.0/22`  |	`20`
+Tunnel (VXLAN) Network | 	`172.29.240.0/22`  | `30`
+Storage Network        |	`172.29.244.0/22`  | `20`
 
 ## IP Assignments
 
@@ -35,12 +35,12 @@ The following host name and IP address assignments are used for this environment
 **Host name** |	**Management IP**  |	**Tunnel (VxLAN) I/P**  |	**Storage IP**
 --------------|--------------------|--------------------------|--------------
 infra1        |	`172.29.236.11`    |	`172.29.240.11`  	      | `172.29.244.11`
-compute1	    | `172.29.236.12'    |	`172.29.240.12`         |	`172.29.244.12`
+compute1	    | `172.29.236.12`    |	`172.29.240.12`         |	`172.29.244.12`
 storage1	    | `172.29.236.13`    |	 `-`                    | `172.29.244.13`
 
-# Configuring the Operating System
+##  Configuring the Operating System
 
-This section covers how to install and configure **Ubuntu 18.04 LTS Serer** in our OpenStack-Ansible host.
+This section covers how to install and configure **Ubuntu 18.04 LTS server** in our OpenStack-Ansible host.
 
 ## Install the Operating System
 
@@ -55,20 +55,52 @@ Since we  require advanced networking and storage features such as; LVM, RAID, m
 !!! Note
     We do not cover on how to install the Ubuntu server here. We assume that you already know howto do it.
 
-###  Configure The Network  Interfaces.
+!!! Important
+    We also recommend setting your locale to en_US.UTF-8. Other locales might work, but they are not tested or supported.
 
-We assume that your OpenStack Ansible host has two network interface cards. We are planning our network like below
+### Configure Ubuntu
 
-**1\.** Configure one network card for accessing the Internet
+**1\.** Update package source lists
+```
+sudo apt-get update
+```
+**2\.** Upgrade the system packages and kernel:
+```
+sudo apt-get dist-upgrade
+```
+**3\.** Reboot the host.
+```
+sudo systemctl reboot
+```
+**4\.** Ensure that the kernel version is `3.13.0-34-generic` or later:
+```
+uname -r
+```
+**5\.** Install additional software packages:
+```
+sudo apt-get install bridge-utils debootstrap ifenslave ifenslave-2.6 lsof lvm2 chrony openssh-server sudo tcpdump vlan python
+```
+**6\.**  Install the kernel extra package if you have one for your kernel version
+```
+sudo apt install linux-image-extra-$(uname -r)
+```
+**7\.** Add the appropriate kernel modules to the `/etc/modules` file to enable VLAN and bond interfaces:
+```
+sudo echo 'bonding' >> /etc/modules && sudo  echo '8021q' >> /etc/modules
+```
+**8\.** Configure Network Time Protocol (NTP) in `/etc/chrony/chrony.conf` to synchronize with a suitable time source and restart the service:
+```
+sudo systemctl enable chrony
+sudo restart chrony
+```
+**9\.** Reboot the host to activate the changes and use the new kernel.
+```
+sudo systemctl reboot
+```
+##  Configure The Network  Interfaces.
 
-```
-Network: 192.168.10.0/24
-```
-**2\.** Configure the other network card for accessing our OpenStack deployment management network.
+This section describes how to configure network interfaces of your host so that it can be used in OpenStack Ansible deployment.
 
-```
-Network: 172.29.236.0/24
-```
 ### Changing `netplan` to `ifupdown`
 
 The classic `ifupdown` network configuration used in Debian/Ubuntu  has been replaced by `netplan` on Ubuntu 18.04 server system.
@@ -89,7 +121,8 @@ network:
   ethernets:
     enp0s3:
       dhcp4: yes
-```
+```   
+
 To re-enable `ifupdown` on this system, run:
 ```
 sudo apt install ifupdown
@@ -137,9 +170,7 @@ You should get an output like below:
     link/ether 08:00:27:b4:05:38 brd ff:ff:ff:ff:ff:ff
 ```
 
-## Network Interface Configuration
-
-### Infra1 Host
+### Infra1 Host Networking
 
 According to above network architecture and design you can configure the network interfaces of infra1 host as below.
 
@@ -183,25 +214,25 @@ iface br-mgmt inet static
     gateway 172.29.236.1
     dns-nameservers 8.8.8.8 8.8.4.4
 
-# Bind the Internal  VIP
+# Bind the Internal LB VIP as we run haproxy without keepalived
 auto br-mgmt:0
 iface br-mgmt:0 inet static
     address 172.29.236.10
     netmask 255.255.252.0
 
-# Bind the Internal  VIP
-  auto eth1:0
-  iface eth1:0 inet static
-     address 192.168.10.10
-     netmask 255.255.255.0
+# Bind the External LB VIP as we run haproxy without keepalived
+auto eth1:0
+iface eth1:0 inet static
+    address 192.168.10.10
+    netmask 255.255.255.0
 
-# External Network access
-  auto eth1
-  iface eth1 inet static
-     address 192.168.10.11
-     netmask 255.255.255.0
-     gateway 192.168.10.1
-     dns-nameservers 8.8.8.8 8.8.4.4
+# External Network access for Floating IP
+auto eth1
+face eth1 inet static
+   address 192.168.10.11
+   netmask 255.255.255.0
+   gateway 192.168.10.1
+   dns-nameservers 8.8.8.8 8.8.4.4
 
 # OpenStack Networking VXLAN (tunnel/overlay) bridge
 #
@@ -225,13 +256,98 @@ iface br-vlan inet manual
     bridge_fd 0
     bridge_ports eth1
 
-# compute1 Network VLAN bridge
-#auto br-vlan
-#iface br-vlan inet manual
-#    bridge_stp off
-#    bridge_waitport 0
-#    bridge_fd 0
+# Storage bridge (optional)
 #
+# Only the COMPUTE and STORAGE nodes must have an IP address
+# on this bridge. When used by infrastructure nodes, the
+# IP addresses are assigned to containers which use this
+# bridge.Deploying and customizing OpenStack Mitaka with openstack-ansible
+#
+# Storage bridge
+auto br-storage
+iface br-storage inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    bridge_ports eth0.20
+    address 172.29.244.11
+    netmask 255.255.252.0
+```
+
+###  Compute1 Host Networking
+
+According to above network architecture and design you can configure the network interfaces of infra1 host as below.
+
+```
+sudo nano /etc/network/interfaces
+```
+Add the the following configurations.
+
+```
+# Physical interfaces
+auto eth0
+iface eth0 inet manual
+
+auto eth1
+iface eth1 inet manual
+
+# Container/Host management VLAN interface
+auto eth0.10
+iface eth0.10 inet manual
+    vlan-raw-device eth0
+
+# OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
+auto eth1.30
+iface eth1.30 inet manual
+    vlan-raw-device eth1
+
+# Storage network VLAN interface (optional)
+auto eth0.20
+iface eth0.20 inet manual
+    vlan-raw-device eth0
+
+# Container/Host management bridge
+auto br-mgmt
+iface br-mgmt inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    bridge_ports eth0.10
+    address 172.29.236.12
+    netmask 255.255.252.0
+    gateway 172.29.236.1
+    dns-nameservers 8.8.8.8 8.8.4.4
+
+# External Network access for Floating IP
+auto eth1
+face eth1 inet static
+   address 192.168.10.12
+   netmask 255.255.255.0
+   gateway 192.168.10.1
+   dns-nameservers 8.8.8.8 8.8.4.4
+
+# OpenStack Networking VXLAN (tunnel/overlay) bridge
+#
+# The COMPUTE, NETWORK and INFRA nodes must have an IP address
+# on this bridge.
+#
+auto br-vxlan
+iface br-vxlan inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    bridge_ports eth1.30
+    address 172.29.240.12
+    netmask 255.255.252.0
+
+# OpenStack Networking VLAN bridge
+auto br-vlan
+iface br-vlan inet manual
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    bridge_ports eth1
+
 # For tenant vlan support, create a veth pair to be used when the neutron
 # agent is not containerized on the compute hosts. 'eth12' is the value used on
 # the host_bind_override parameter of the br-vlan network section of the
@@ -257,13 +373,6 @@ iface br-vlan inet manual
 # IP addresses are assigned to containers which use this
 # bridge.Deploying and customizing OpenStack Mitaka with openstack-ansible
 #
-auto br-storage
-iface br-storage inet manual
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth0.20
-
 # Storage bridge
 auto br-storage
 iface br-storage inet static
@@ -271,6 +380,6 @@ iface br-storage inet static
     bridge_waitport 0
     bridge_fd 0
     bridge_ports eth0.20
-    address 172.29.244.11
+    address 172.29.244.12
     netmask 255.255.252.0
 ```
