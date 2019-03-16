@@ -78,11 +78,11 @@ sudo nano /etc/default/grub
 ```
 Look for `GRUB_CMDLINE_LINUX`  and add the following `net.ifnames=0 biosdevname=0`.
 
-From:
+**From:**
 ```
 GRUB_CMDLINE_LINUX=""
 ```
-To:
+**To:**
 
 ```
 GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"
@@ -108,4 +108,14 @@ You should get an output like below:
     link/ether 08:00:27:cb:31:f1 brd ff:ff:ff:ff:ff:ff
 3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
     link/ether 08:00:27:b4:05:38 brd ff:ff:ff:ff:ff:ff
+```
+#### Assigning IP Addresses
+
+Use the following sample configuration  your network.
+
+```
+sudo nano /etc/network/interfaces
+
+Add the following configurations
+
 ```
