@@ -97,6 +97,7 @@ sudo restart chrony
 ```
 sudo systemctl reboot
 ```
+
 ##  Configure The Network  Interfaces.
 
 This section describes how to configure network interfaces of your host so that it can be used in OpenStack Ansible deployment.
@@ -122,7 +123,6 @@ network:
     enp0s3:
       dhcp4: yes
 ```   
-
 To re-enable `ifupdown` on this system, run:
 ```
 sudo apt install ifupdown
@@ -274,6 +274,11 @@ iface br-storage inet static
     netmask 255.255.252.0
 ```
 
+Reboot the system
+```
+sudo systemctl reboot
+```
+
 ###  Compute1 Host Networking
 
 According to above network architecture and design you can configure the network interfaces of Compute1 host as below.
@@ -382,4 +387,69 @@ iface br-storage inet static
     bridge_ports eth0.20
     address 172.29.244.12
     netmask 255.255.252.0
+```
+Reboot the system
+
+```
+sudo systemctl reboot
+```
+###  Storage1 Host Networking
+
+According to above network architecture and design you can configure the network interfaces of Host1 host as below.
+
+```
+sudo nano /etc/network/interfaces
+```
+Add the the following configurations.
+
+```
+# Physical interfaces
+auto eth0
+iface eth0 inet manual
+
+auto eth1
+iface eth1 inet manual
+
+# Container/Host management VLAN interface
+auto eth0.10
+iface eth0.10 inet manual
+    vlan-raw-device eth0
+
+# OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
+auto eth1.30
+iface eth1.30 inet manual
+    vlan-raw-device eth1
+
+# Storage network VLAN interface (optional)
+auto eth0.20
+iface eth0.20 inet manual
+    vlan-raw-device eth0
+
+# Container/Host management bridge
+auto br-mgmt
+iface br-mgmt inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    bridge_ports eth0.10
+    address 172.29.236.13
+    netmask 255.255.252.0
+    gateway 172.29.236.1
+    dns-nameservers 8.8.8.8 8.8.4.4
+
+# Storage bridge
+auto br-storage
+iface br-storage inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    bridge_ports eth0.20
+    address 172.29.244.13
+    netmask 255.255.252.0
+```
+
+Reboot the system
+
+```
+sudo systemctl reboot
 ```
