@@ -7,9 +7,9 @@ The default networks used in an OpenStack-Ansible in this deployment can be obse
 
 **Network**       |	**CIDR**          | **VLAN**
 ------------------|-------------------|-------------
-Management Network|	`172.25.236.0/22` | `100`
-Overlay Network 	| `172.25.240.0/22`	| `300`  
-Storage Network	  | `172.29.244.0/22` |	`200`
+Management Network|	`172.25.236.0/22` | `10`
+Overlay Network 	| `172.25.240.0/22`	| `30`  
+Storage Network	  | `172.29.244.0/22` |	`20`
 
 !!! Note
     Unless, if we specifically do mention about a new network architecture  we will be referring to the same network architecture above through out this document.
@@ -44,3 +44,149 @@ OpenStack-Ansible supports the use of a `single` interface or set of `bonded` in
 The following diagram demonstrates hosts using a single interface:
 
 ![](img/single-interface.jpg)
+
+The following diagram demonstrates hosts using a single bond:
+
+![](img/single-bond-interface.jpg)
+
+### Single Bond Sample Network Configuration
+
+Each host will require the correct network bridges to be implemented.
+
+The following is the `/etc/network/interfaces` file for `infra1` control plane host using a single bond in a Ubuntu host.
+
+!!! Note
+
+    If your environment does not have eth0, but instead has p1p1 or some other interface name, ensure that all references to eth0 in all configuration files are replaced with the appropriate name. The same applies to additional network interfaces.
+
+    Please refer to [Configuring Network Interfaces](/prepare-deployment-host/#configure_the_network_interfaces) for more details.
+
+```
+
+!!! Important
+
+    This is a multi-NIC bonded configuration to implement the required bridges for OpenStack-Ansible. This illustrates the configuration of the first Infrastructure host `infra1` and the IP addresses assigned should be adapted for implementation on the other hosts.  After implementing this configuration, the host will need to be rebooted.
+
+    Assuming that eth0/1 and eth2/3 are dual port NIC's we pair `eth0` with `eth2` for increased resiliency in the case of one interface card failing.
+
+```
+auto eth0
+
+iface eth0 inet manual
+    bond-master bond0
+    bond-primary eth0
+
+auto eth1
+iface eth1 inet manual
+
+auto eth2
+iface eth2 inet manual
+    bond-master bond0
+
+auto eth3
+iface eth3 inet manual
+
+# Create a bonded interface. Note that the "bond-slaves" is set to none. This
+# is because the bond-master has already been set in the raw interfaces for
+# the new bond0.
+
+auto bond0
+iface bond0 inet manual
+    bond-slaves none
+    bond-mode active-backup
+    bond-miimon 100
+    bond-downdelay 200
+    bond-updelay 200
+
+# Container/Host management VLAN interface
+
+auto bond0.10
+iface bond0.10 inet manual
+    vlan-raw-device bond0
+
+# OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
+
+auto bond0.30
+iface bond0.30 inet manual
+    vlan-raw-device bond0
+
+# Storage network VLAN interface (optional)
+
+auto bond0.20
+iface bond0.20 inet manual
+
+# Container/Host management bridge
+
+auto br-mgmt
+iface br-mgmt inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    bridge_ports bond0.10
+    address 172.29.236.11
+    netmask 255.255.252.0
+    gateway 172.29.236.1
+    dns-nameservers 8.8.8.8 8.8.4.4
+
+# OpenStack Networking VXLAN (tunnel/overlay) bridge
+#
+# Nodes hosting Neutron agents must have an IP address on this interface,
+# including COMPUTE, NETWORK, and collapsed INFRA/NETWORK nodes.
+#
+
+auto br-vxlan
+iface br-vxlan inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    bridge_ports bond0.30
+    address 172.29.240.16
+    netmask 255.255.252.0
+
+# OpenStack Networking VLAN bridge
+#
+# The "br-vlan" bridge is no longer necessary for deployments unless Neutron
+# agents are deployed in a container. Instead, a direct interface such as
+# bond0 can be specified via the "host_bind_override" override when defining
+# provider networks.
+#
+#auto br-vlan
+#iface br-vlan inet manual
+#    bridge_stp off
+#    bridge_waitport 0
+#    bridge_fd 0
+#    bridge_ports bond0
+
+# compute1 Network VLAN bridge
+#auto br-vlan
+#iface br-vlan inet manual
+#    bridge_stp off
+#    bridge_waitport 0
+#    bridge_fd 0
+#
+
+# Storage bridge (optional)
+#
+# Only the COMPUTE and STORAGE nodes must have an IP address
+# on this bridge. When used by infrastructure nodes, the
+# IP addresses are assigned to containers which use this
+# bridge.
+#
+auto br-storage
+iface br-storage inet manual
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    bridge_ports bond0.20
+
+# compute1 Storage bridge
+
+#auto br-storage
+#iface br-storage inet static
+#    bridge_stp off#auto br-storage
+#    bridge_waitport 0
+#    bridge_fd 0
+#    bridge_ports bond0.20
+#    address 172.29.244.16
+#    netmask 255.255.252.0
+```
