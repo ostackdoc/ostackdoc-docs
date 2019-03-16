@@ -276,7 +276,7 @@ iface br-storage inet static
 
 ###  Compute1 Host Networking
 
-According to above network architecture and design you can configure the network interfaces of infra1 host as below.
+According to above network architecture and design you can configure the network interfaces of Compute1 host as below.
 
 ```
 sudo nano /etc/network/interfaces
