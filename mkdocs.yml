@@ -35,7 +35,8 @@ extra:
 nav:
 - 'Introduction': 'index.md'
 - 'Overview': 'overview.md'
-- 'Prepare Deployment Host': 'prepare-deployment-host.md'
+- 'Network Architectures': 'network-architectures.md'
+  - 'Prepare Deployment Host': 'prepare-deployment-host.md'
 - 'Prepare the Target Hosts': 'prepare-the-target-hosts.md'
 - 'Test Environment Example': 'test-env-example.md'
 - 'Preparing OpenStack Nodes':
