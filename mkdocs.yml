@@ -1,5 +1,5 @@
 # Project information
-site_name: 'Openstack Deployment Guide'
+site_name: 'Openstack Ansible Deployment Guide'
 site_description: 'Guide for openstack-ansible Deployers'
 site_author: 'Chinthaka Deshapriya'
 site_url: 'https://ostackdoc.github.io'
