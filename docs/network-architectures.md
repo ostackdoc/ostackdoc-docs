@@ -61,8 +61,6 @@ The following is the `/etc/network/interfaces` file for `infra1` control plane h
 
     Please refer to [Configuring Network Interfaces](/prepare-deployment-host/#configure_the_network_interfaces) for more details.
 
-```
-
 !!! Important
 
     This is a multi-NIC bonded configuration to implement the required bridges for OpenStack-Ansible. This illustrates the configuration of the first Infrastructure host `infra1` and the IP addresses assigned should be adapted for implementation on the other hosts.  After implementing this configuration, the host will need to be rebooted.
