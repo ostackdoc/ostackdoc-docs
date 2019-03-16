@@ -65,7 +65,7 @@ The following is the `/etc/network/interfaces` file for `infra1` control plane h
 
     This is a multi-NIC bonded configuration to implement the required bridges for OpenStack-Ansible. This illustrates the configuration of the first Infrastructure host `infra1` and the IP addresses assigned should be adapted for implementation on the other hosts.  After implementing this configuration, the host will need to be rebooted.
 
-    Assuming that eth0/1 and eth2/3 are dual port NIC's we pair `eth0` with `eth2` for increased resiliency in the case of one interface card failing.
+    Assuming that `eth0/1` and `eth2/3` are dual port NIC's we pair `eth0` with `eth2` for increased resiliency in the case of one interface card failing.
 
 ```
 auto eth0
@@ -198,7 +198,7 @@ The following diagram demonstrates hosts using multiple bonds:
 
 ![](img/multiple-interfaces.jpg)
 
-### Multiple Bond Sample Network Configuration
+### Multiples Bond Sample Network Configuration
 
 !!! Note
 
@@ -210,7 +210,7 @@ The following diagram demonstrates hosts using multiple bonds:
 
     This is a multi-NIC bonded configuration to implement the required bridges for OpenStack-Ansible. This illustrates the configuration of the first Infrastructure host `infra1` and the IP addresses assigned should be adapted for implementation on the other hosts.  After implementing this configuration, the host will need to be rebooted.
 
-    Assuming that eth0/1 and eth2/3 are dual port NIC's we pair `eth0` with `eth2` for increased resiliency in the case of one interface card failing.
+    Assuming that `eth0/1` and `eth2/3` are dual port NIC's we pair `eth0` with `eth2` for increased resiliency in the case of one interface card failing.
 ```
 auto eth0
 iface eth0 inet manual
