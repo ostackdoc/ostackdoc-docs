@@ -63,7 +63,49 @@ network:
     enp0s3:
       dhcp4: yes
 ```
-** To re-enable `ifupdown` on this system, run:
+To re-enable `ifupdown` on this system, run:
 ```
 sudo apt install ifupdown
 ```                                        
+#### Consistent Naming for Network Interfaces
+
+New versions of Linux Kernel, including the one in our Ubuntu server name the network interfaces using a new convention based on the network interface type (PCI, PCIe, Onboard, Wireless, etc.,) and the relative position of the motherboard which we have slotted the specific card. For example, you may get interface names like `enp0s3, eno1, p2p1` etc. While this is an advantageous in many cases as it provides consist ant name of each interface during our OpenStack-Ansible deployment we are going to rename them back to our traditional naming convention `eth0, eth1`, and so on.
+
+To get back to `ethX` again will do the following configurations
+
+```
+sudo nano /etc/default/grub
+```
+Look for `GRUB_CMDLINE_LINUX`  and add the following `net.ifnames=0 biosdevname=0`.
+
+From:
+```
+GRUB_CMDLINE_LINUX=""
+```
+To:
+
+```
+GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"
+```
+Generate a new grub file using the following command.
+```
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
+Now reboot your systems
+
+```
+sudo systemctl reboot
+```
+Now check your interface name:
+```
+ip link show
+```
+You should get an output like below:
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:cb:31:f1 brd ff:ff:ff:ff:ff:ff
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:b4:05:38 brd ff:ff:ff:ff:ff:ff
+```
