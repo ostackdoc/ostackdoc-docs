@@ -123,7 +123,7 @@ We  recommend you the following partitions scheme for your node installation. We
 
 You need to apply the same above  for the `compute1` and `storage1` nodes as well.
 
-:bulb:
+!!! Info
     Keep the remaining space in-allocated since we are going to use them later for few other uses
 
 !!! Note
@@ -285,7 +285,6 @@ iface br-mgmt inet static
     bridge_ports eth0.10
     address 172.29.236.11
     netmask 255.255.252.0
-    gateway 172.29.236.1
     dns-nameservers 8.8.8.8 8.8.4.4
 
 # Bind the Internal LB VIP as we run haproxy without keepalived
@@ -601,7 +600,7 @@ Logical Volume Manager (LVM) enables a single device to be split into multiple l
 !!! Note
     OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
 
-1\. To use the optional Block Storage (cinder) service, create an LVM volume group named `cinder-volumes` on the storage host. Specify a metadata size of `2048` when creating the physical volume. For example:
+1\. To use the optional Block Storage (cinder) service, create an LVM volume group named `cinder-volumes` on the storage host. Specify a metadata size of `2048` when creating the physical volume.  For example:
 ```
 sudo pvcreate --metadatasize 2048  physical_volume_device_path (/dev/sda5)
 sudo  vgcreate cinder-volumes physical_volume_device_path (/dev/sda5)
@@ -656,3 +655,43 @@ sudo apt-get install iptables-persistent
 
 !!! Important
     If you make further changes to your `iptables` rules, remember to save them again using the  command in the step 4 above. The `iptables-persistent` looks for the files `rules.v4` and `rules.v6` under `/etc/iptables`.
+
+## Setup  OpenStack Ansible Host
+
+In this example environment  we use `infra1` node  as the 'openstack-anible' host.
+
+Execute the following commands in infra1 host.
+
+1\. Update package source lists:
+```
+sudo apt-get update
+```
+
+2\. Upgrade the system packages and kernel:
+```
+sudo apt-get dist-upgrade
+```
+
+3\. Reboot the host.
+```
+sudo system reboot
+
+4\. Install additional software packages if they were not installed during the operating system installation:
+```
+sudo apt-get install aptitude build-essential git ntp ntpdate openssh-server python-dev sudo
+```
+## Install the Source and Dependencies
+
+Install the source and dependencies for the deployment host.
+
+1\. Clone the latest stable release of the OpenStack-Ansible Git repository in the `/opt/openstack-ansible` directory:
+
+```
+sudo su -
+git clone -b 18.1.4 https://git.openstack.org/openstack/openstack-ansible /opt/openstack-ansible
+```
+2\. Change to the `/opt/openstack-ansible` directory, and run the Ansible bootstrap script:
+```
+cd /opt/openstack-ansible
+scripts/bootstrap-ansible.sh
+```
