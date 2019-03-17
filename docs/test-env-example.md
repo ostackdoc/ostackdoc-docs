@@ -615,24 +615,24 @@ ping -c4 google.command
 
 In our test environment setup `infra1` host will be used as the Ansible host and it will also act as the gateway for OpenStack Ansible lxc lxc_containers. Let's to the following configurations to get this done.
 
-1. Enable IP Forwarding
+1\. Enable IP Forwarding
 ```
 sudo echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 ```
-2. Update without rebooting
+2\. Update without rebooting
 ```
 sudo sysctl -p
 ```
-3. Create a Masquerading rule to enable SNAT
+3\. Create a Masquerading rule to enable SNAT
 ```
 sudo iptables -t nat -A POSTROUTING -j MASQUERADE
 ```
-4. Save your rules
+4\. Save your rules
 ```
 sudo mkdir -p /etc/iptables
 sudo sudo iptables-save > /etc/iptables/rules.v4
 ```
-5. You can automate the restore process at reboot by installing an additional package for `iptables` which takes over the loading of the saved rules. To this with the following command
+5\. You can automate the restore process at reboot by installing an additional package for `iptables` which takes over the loading of the saved rules. To this with the following command
 ```
 sudo apt-get install iptables-persistent
 ```
