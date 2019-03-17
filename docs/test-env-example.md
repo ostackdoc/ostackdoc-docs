@@ -10,7 +10,7 @@ This example environment has the following characteristics:
 
 The following figure depicts this test environment and its components.
 
-![](img/openstack-test-env-v1.jpg)
+![zoomify](img/openstack-test-env-v1.jpg)
 
 ## Configuring the network
 
@@ -75,7 +75,7 @@ The container network interface that the bridge attaches to is configurable in t
 
 In our test environment each has a dual port Ethernet card and we will configure our test environment network as a multiple interfaces as depicted by the diagram below.
 
-![](img/multiple-interfaces.jpg)
+![zoomify](img/multiple-interfaces.jpg)
 
 ## Network CIDR/VLAN Assignments
 
@@ -559,7 +559,7 @@ The key's randomart image is:
 **2\.** Copy the keys to compute1 and storage1 hosts.
 ```
 ssh-copy-id root@compute1
-ssh-copy-id root@Storage1
+ssh-copy-id root@storage1
 ```
 
 !!! Note
@@ -595,7 +595,7 @@ sudo  vgcreate cinder-volumes physical_volume_device_path (/dev/sda5)
 
 ### Setup DNS Resolver
 
-Ubuntu 18.04 systems make a symlink to ``/etc/resolv.conf` with `systemd-resolve` by default.
+Ubuntu 18.04 systems make a symlink to ``/etc/resolv.conf` with `../run/systemd/resolve/stub-resolv.conf` by default.
 
 **1\.** Remove symlink
 ```
@@ -610,3 +610,7 @@ sudo echo "nameserver 8.8.8.8" > /etc/resolv.conf
 ping -c4 google.command
 ```
 **4\.** Carry out above in all openstack hosts.
+
+## Setup NAT Gateway.
+
+In our test environment setup `infra1` host will be used as the Ansible host and it will also act as the gateway for OpenStack Ansible lxc lxc_containers. Let's to the following configurations to get this done.
