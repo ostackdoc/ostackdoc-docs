@@ -19,12 +19,12 @@ OpenStack-Ansible uses bridges to connect physical and logical network interface
 
 **Bridge name**| **Best configured on** |	**With a static IP***
 -----------|-------------------|-------------------
-br-mgmt	   | On every node |	Always
-br-storage | On every storage node  |	When component is deployed on metal
+`br-mgmt`	   | On every node |	Always
+`br-storage` | On every storage node  |	When component is deployed on metal
            | On every compute node	| Always
-br-vxlan	 | On every network node	| When component is deployed on metal
+`br-vxlan`	 | On every network node	| When component is deployed on metal
            | On every compute node| Always
-br-vlan	   | On every network node|	Never
+`br-vlan`  	   | On every network node|	Never
            | On every compute node| Never
 
 ## Host Network Bridges Information
