@@ -21,7 +21,7 @@ theme:
   font:
     text: 'Roboto'
     code: 'Roboto Mono'
-   highlightjs: true
+  highlightjs: true
 
 
 # Customization
