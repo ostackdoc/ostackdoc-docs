@@ -10,7 +10,7 @@ This example environment has the following characteristics:
 
 The following figure depicts this test environment and its components.
 
-![zoomify](img/openstack-test-env-v1.jpg)
+![zoomify](img/openstack-test-env-v1.jpg){.center .xsmall}
 
 ## Configuring the network
 
@@ -75,7 +75,7 @@ The container network interface that the bridge attaches to is configurable in t
 
 In our test environment each has a dual port Ethernet card and we will configure our test environment network as a multiple interfaces as depicted by the diagram below.
 
-![zoomify](img/multiple-interfaces.jpg)
+![zoomify](img/multiple-interfaces.jpg){.center .xsmall}
 
 ## Network CIDR/VLAN Assignments
 
