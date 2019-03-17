@@ -123,9 +123,8 @@ We  recommend you the following partitions scheme for your node installation. We
 
 You need to apply the same above  for the `compute1` and `storage1` nodes as well.
 
-!!! Info   
-    Keep the remaining space in-allocated since we are going to user them later for other uses
-
+:bulb:
+    Keep the remaining space in-allocated since we are going to use them later for few other uses
 
 !!! Note
     We do not cover on how to install the Ubuntu server here. We assume that you already know howto do it.
