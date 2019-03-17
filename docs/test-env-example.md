@@ -93,9 +93,9 @@ The following host name and IP address assignments are used for this environment
 
 **Host name** |	**Management IP**  |	**Tunnel (VxLAN) I/P**  |	**Storage IP**
 --------------|--------------------|--------------------------|--------------
-infra1        |	`172.29.236.11`    |	`172.29.240.11`  	      | `172.29.244.11`
-compute1	    | `172.29.236.12`    |	`172.29.240.12`         |	`172.29.244.12`
-storage1	    | `172.29.236.13`    |	 `-`                    | `172.29.244.13`
+`infra1`        |	`172.29.236.11`    |	`172.29.240.11`  	      | `172.29.244.11`
+`compute1`	    | `172.29.236.12`    |	`172.29.240.12`         |	`172.29.244.12`
+`storage1`	    | `172.29.236.13`    |	 `-`                    | `172.29.244.13`
 
 ##  Configuring the Operating System
 
@@ -115,14 +115,15 @@ Since we  require advanced networking and storage features such as; LVM, RAID, m
 
 We  recommend you the following partitions scheme for your node installation. We will be using LVM devices created on a Volume Group by the short  hostname (`hostname -s`) of the system. For example `vg_infra1`  for `infra1`.
 
-**Device** | **Size** | **Type**|*Mount Point**
+**Device** | **Size** | **Type**|**Mount Point**
 -----------|----------|---------|--------------
 `/dev/vg_infra1/lv_boot` | `200MB` | `EXT4` | `/boot`
-`/dev/vg_infra1/lv_swap` | `RAM+2G` | `EXT4` | `none'`
-`/dev/vg_infra1/lv_root` | `100G` | `EXT4` | `none'`
+`/dev/vg_infra1/lv_swap` | `RAM+2G` | `EXT4` | `none`
+`/dev/vg_infra1/lv_root` | `100G` | `EXT4` | `/`
 
-!!! Information
-    Keep the remaining space in-allocated since we are going to user them later for other uses
+You can apply the same for the `compute1` and `storage1` nodes as well.
+
+> :bulb:  Keep the remaining space in-allocated since we are going to user them later for few other uses
 
 !!! Note
     We do not cover on how to install the Ubuntu server here. We assume that you already know howto do it.
