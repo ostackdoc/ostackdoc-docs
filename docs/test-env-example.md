@@ -10,7 +10,7 @@ This example environment has the following characteristics:
 
 The following figure depicts this test environment and its components.
 
-![zoomify](img/openstack-test-env-v1.jpg){.center .xsmall}
+![zoomify](img/openstack-test-env-v1.jpg)
 
 ## Configuring the network
 
@@ -75,7 +75,7 @@ The container network interface that the bridge attaches to is configurable in t
 
 In our test environment each has a dual port Ethernet card and we will configure our test environment network as a multiple interfaces as depicted by the diagram below.
 
-![zoomify](img/multiple-interfaces.jpg){.center .xsmall}
+![zoomify](img/multiple-interfaces.jpg)
 
 ## Network CIDR/VLAN Assignments
 
@@ -614,3 +614,32 @@ ping -c4 google.command
 ## Setup NAT Gateway.
 
 In our test environment setup `infra1` host will be used as the Ansible host and it will also act as the gateway for OpenStack Ansible lxc lxc_containers. Let's to the following configurations to get this done.
+
+1. Enable IP Forwarding
+```
+sudo echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+```
+2. Update without rebooting
+``1
+sudo sysctl -p
+```
+3. Create a Masquerading rule to enable SNAT
+```
+sudo iptables -t nat -A POSTROUTING -j MASQUERADE
+```
+4. Save your rules
+```
+sudo mkdir -p /etc/iptables
+sudo sudo iptables-save > /etc/iptables/rules.v4
+
+5. You can automate the restore process at reboot by installing an additional package for `iptables` which takes over the loading of the saved rules. To this with the following command
+```
+sudo apt-get install iptables-persistent
+```
+!!! Note
+    After the installation the initial setup will ask to save the current rules for `IPv4` and `IPv6`, just select `Yes` and press `enter` for both.
+
+!!! Important
+    If you make further changes to your `iptables` rules, remember to save them again using the  command in the step 4 above. The `iptables-persistent` looks for the files `rules.v4` and `rules.v6` under `/etc/iptables`.
+
+  
