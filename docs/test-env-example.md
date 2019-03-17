@@ -19,13 +19,57 @@ OpenStack-Ansible uses bridges to connect physical and logical network interface
 
 **Bridge name**| **Best configured on** |	**With a static IP***
 -----------|-------------------|-------------------
-br-mgmt	|On every node |	Always
-br-storage |	On every storage node |	When component is deployed on metal
+br-mgmt	   | On every node |	Always
+br-storage | On every storage node  |	When component is deployed on metal
            | On every compute node	| Always
-br-vxlan	  | On every network node	 | When component is deployed on metal
-            | On every compute node| Always
-br-vlan	    | On every network node|	Never
-            | On every compute node| Never
+br-vxlan	 | On every network node	| When component is deployed on metal
+           | On every compute node| Always
+br-vlan	   | On every network node|	Never
+           | On every compute node| Never
+
+## Host Network Bridges Information
+
+This section describes the Network Bridges used by OpenStack hosts
+
+### LXC internal: lxcbr0
+
+The `lxcbr0` bridge is required for LXC, but OpenStack-Ansible configures it automatically. It provides external (typically Internet) connectivity to containers with `dnsmasq (DHCP/DNS) + NAT`.
+
+This bridge does not directly attach to any physical or logical interfaces on the host because `iptables` handles connectivity. It attaches to `eth0` in each container.
+
+The container network that the bridge attaches to is configurable in the `openstack_user_config.yml` file in the provider_networks dictionary.
+
+### Container management: br-mgmt
+
+The `br-mgmt` bridge provides management of and communication between the infrastructure and OpenStack services.
+
+The bridge attaches to a physical or logical interface, typically a `bond0 VLAN subinterface`. It also attaches to `eth1` in each container.
+
+The container network interface that the bridge attaches to is configurable in the `openstack_user_config.yml` file.
+
+### Storage:br-storage
+
+The `br-storage` bridge provides segregated access to Block Storage devices between OpenStack services and Block Storage devices.
+
+The bridge attaches to a physical or logical interface, typically a `bond0 VLAN subinterface`. It also attaches to eth2 in each associated container.
+
+The container network interface that the bridge attaches to is configurable in the `openstack_user_config.yml` file.
+
+### OpenStack Networking tunnel: br-vxlan
+
+The `br-vxlan` bridge is required if the environment is configured to allow projects to create virtual networks using `VXLAN`. It provides the interface for virtual (`VXLAN`) tunnel networks.
+
+The bridge attaches to a physical or logical interface, typically a `bond1 VLAN subinterface`. It also attaches to `eth10` in each associated container.
+
+The container network interface it attaches to is configurable in the `openstack_user_config.yml` file.
+
+### OpenStack Networking provider: br-vlan
+
+The `br-vlan` bridge is provides infrastructure for `VLAN` tagged or flat (no `VLAN` tag) networks.
+
+The bridge attaches to a physical or logical interface, typically `bond1`. It attaches to `eth11` for VLAN type networks in each associated container. It is not assigned an IP address because it handles only layer 2 connectivity.
+
+The container network interface that the bridge attaches to is configurable in the `openstack_user_config.yml` file.
 
 ## Network Architecture
 
@@ -524,21 +568,27 @@ ssh-copy-id root@Storage1
 **3\.** Test it
 ```
 ssh root@compute1
-ssh root@Storage1Note
-
-OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
-
-Note
-
-OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
-
-
+ssh root@Storage1
 ```
 If you can connect and get the shell without authenticating, it is working. SSH provides a shell without asking for a password.
+
+!!! Note
+
+    OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
 
 !!! Important
     OpenStack-Ansible deployments require the presence of a `/root/.ssh/id_rsa.pub` file on the deployment host. The contents of this file is inserted into an `authorized_keys` file for the containers, which is a necessary step for the Ansible playbooks. You can override this behavior by setting the `lxc_container_ssh_key` variable to the public key for the container.
 
-## Configuring The storage
+## Configuring The Storage
 
 Logical Volume Manager (LVM) enables a single device to be split into multiple logical volumes that appear as a physical storage device to the operating system. The Block Storage (cinder) service, and LXC containers that optionally run the OpenStack infrastructure, can optionally use LVM for their data storage.
+
+!!! Note
+    OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
+
+**1\.** To use the optional Block Storage (cinder) service, create an LVM volume group named `cinder-volumes` on the storage host. Specify a metadata size of `2048` when creating the physical volume. For example:
+```
+sudo pvcreate --metadatasize 2048  physical_volume_device_path (/dev/sda5)
+sudo  vgcreate cinder-volumes physical_volume_device_path (/dev/sda5)
+```
+**2\.** Optionally, create an LVM volume group named `lxc` for container file systems if you want to use `LXC` with `LVM`. If the `lxc` volume group does not exist, containers are automatically installed on the file system under `/var/lib/lxc` by default.
