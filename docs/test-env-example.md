@@ -31,7 +31,7 @@ br-vlan	   | On every network node|	Never
 
 This section describes the Network Bridges used by OpenStack hosts
 
-### LXC internal: lxcbr0
+### LXC internal: `lxcbr0`
 
 The `lxcbr0` bridge is required for LXC, but OpenStack-Ansible configures it automatically. It provides external (typically Internet) connectivity to containers with `dnsmasq (DHCP/DNS) + NAT`.
 
@@ -39,7 +39,7 @@ This bridge does not directly attach to any physical or logical interfaces on th
 
 The container network that the bridge attaches to is configurable in the `openstack_user_config.yml` file in the provider_networks dictionary.
 
-### Container management: br-mgmt
+### Container management:`br-mgmt`
 
 The `br-mgmt` bridge provides management of and communication between the infrastructure and OpenStack services.
 
@@ -47,7 +47,7 @@ The bridge attaches to a physical or logical interface, typically a `bond0 VLAN 
 
 The container network interface that the bridge attaches to is configurable in the `openstack_user_config.yml` file.
 
-### Storage:br-storage
+### Storage:`br-storage`
 
 The `br-storage` bridge provides segregated access to Block Storage devices between OpenStack services and Block Storage devices.
 
@@ -55,7 +55,7 @@ The bridge attaches to a physical or logical interface, typically a `bond0 VLAN 
 
 The container network interface that the bridge attaches to is configurable in the `openstack_user_config.yml` file.
 
-### OpenStack Networking tunnel: br-vxlan
+### OpenStack Networking tunnel:`br-vxlan`
 
 The `br-vxlan` bridge is required if the environment is configured to allow projects to create virtual networks using `VXLAN`. It provides the interface for virtual (`VXLAN`) tunnel networks.
 
@@ -63,7 +63,7 @@ The bridge attaches to a physical or logical interface, typically a `bond1 VLAN 
 
 The container network interface it attaches to is configurable in the `openstack_user_config.yml` file.
 
-### OpenStack Networking provider: br-vlan
+### OpenStack Networking provider:`br-vlan`
 
 The `br-vlan` bridge is provides infrastructure for `VLAN` tagged or flat (no `VLAN` tag) networks.
 
@@ -603,7 +603,7 @@ sudo rm -f /etc/resolv.conf
 ```
 2. Create the Resolver
 ```
-sudo echo "nameserver 8.8.8.8" > /etc/resolv.conf
+sudo echo "nameserv*er 8.8.8.8" > /etc/resolv.conf
 ```
 3\. Test it
 ```
