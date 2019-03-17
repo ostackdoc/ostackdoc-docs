@@ -121,10 +121,10 @@ We  recommend you the following partitions scheme for your node installation. We
 `/dev/vg_infra1/lv_swap` | `RAM+2G` | `EXT4` | `none`
 `/dev/vg_infra1/lv_root` | `100G` | `EXT4` | `/`
 
-You can apply the same for the `compute1` and `storage1` nodes as well.
+You need to apply the same above  for the `compute1` and `storage1` nodes as well.
 
-
-:bulb:   Keep the remaining space in-allocated since we are going to user them later for other uses
+!!! Info   
+    Keep the remaining space in-allocated since we are going to user them later for other uses
 
 
 !!! Note
