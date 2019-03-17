@@ -592,3 +592,21 @@ sudo pvcreate --metadatasize 2048  physical_volume_device_path (/dev/sda5)
 sudo  vgcreate cinder-volumes physical_volume_device_path (/dev/sda5)
 ```
 **2\.** Optionally, create an LVM volume group named `lxc` for container file systems if you want to use `LXC` with `LVM`. If the `lxc` volume group does not exist, containers are automatically installed on the file system under `/var/lib/lxc` by default.
+
+### Setup DNS Resolver
+
+Ubuntu 18.04 systems make a symlink to ``/etc/resolv.conf` with `systemd-resolve` by default.
+
+**1\.** Remove symlink
+```
+sudo rm -f /etc/resolv.conf
+```
+**2.** Create the Resolver
+```
+sudo echo "nameserver 8.8.8.8" > /etc/resolv.conf
+```
+**3\.** Test it
+```
+ping -c4 google.command
+```
+**4\.** Carry out above in all openstack hosts.
