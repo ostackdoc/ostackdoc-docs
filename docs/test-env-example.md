@@ -51,7 +51,7 @@ The container network interface that the bridge attaches to is configurable in t
 
 The `br-storage` bridge provides segregated access to Block Storage devices between OpenStack services and Block Storage devices.
 
-The bridge attaches to a physical or logical interface, typically a `bond0 VLAN subinterface`. It also attaches to eth2 in each associated container.
+The bridge attaches to a physical or logical interface, typically a `bond0 VLAN subinterface`. It also attaches to `eth2` in each associated container.
 
 The container network interface that the bridge attaches to is configurable in the `openstack_user_config.yml` file.
 
