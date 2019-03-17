@@ -586,30 +586,30 @@ Logical Volume Manager (LVM) enables a single device to be split into multiple l
 !!! Note
     OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
 
-**1\.** To use the optional Block Storage (cinder) service, create an LVM volume group named `cinder-volumes` on the storage host. Specify a metadata size of `2048` when creating the physical volume. For example:
+1\. To use the optional Block Storage (cinder) service, create an LVM volume group named `cinder-volumes` on the storage host. Specify a metadata size of `2048` when creating the physical volume. For example:
 ```
 sudo pvcreate --metadatasize 2048  physical_volume_device_path (/dev/sda5)
 sudo  vgcreate cinder-volumes physical_volume_device_path (/dev/sda5)
 ```
-**2\.** Optionally, create an LVM volume group named `lxc` for container file systems if you want to use `LXC` with `LVM`. If the `lxc` volume group does not exist, containers are automatically installed on the file system under `/var/lib/lxc` by default.
+2\. Optionally, create an LVM volume group named `lxc` for container file systems if you want to use `LXC` with `LVM`. If the `lxc` volume group does not exist, containers are automatically installed on the file system under `/var/lib/lxc` by default.
 
 ### Setup DNS Resolver
 
 Ubuntu 18.04 systems make a symlink to ``/etc/resolv.conf` with `../run/systemd/resolve/stub-resolv.conf` by default.
 
-**1\.** Remove symlink
+1\. Remove symlink
 ```
 sudo rm -f /etc/resolv.conf
 ```
-**2.** Create the Resolver
+2. Create the Resolver
 ```
 sudo echo "nameserver 8.8.8.8" > /etc/resolv.conf
 ```
-**3\.** Test it
+3\. Test it
 ```
 ping -c4 google.command
 ```
-**4\.** Carry out above in all openstack hosts.
+4\. Carry out above in all openstack hosts.
 
 ## Setup NAT Gateway.
 
@@ -632,7 +632,7 @@ sudo iptables -t nat -A POSTROUTING -j MASQUERADE
 sudo mkdir -p /etc/iptables
 sudo sudo iptables-save > /etc/iptables/rules.v4
 ```
-5\. You can automate the restore process at reboot by installing an additional package for `iptables` which takes over the loading of the saved rules. To this with the following command
+5\. You can automate the restore process at reboot by installing an additional package for `iptables` which takes over the loading of the saved rules. To do this install the following command.
 ```
 sudo apt-get install iptables-persistent
 ```
