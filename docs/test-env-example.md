@@ -711,7 +711,7 @@ The `/etc/openstack_deploy/openstack_user_config.yml` file defines the environme
 
 The following configuration describes the layout for this environment.
 
-!!! Info "`/etc/openstack_deploy/openstack_user_config.yml`"
+!!! Example "`/etc/openstack_deploy/openstack_user_config.yml`"
 
     ```
     ---
