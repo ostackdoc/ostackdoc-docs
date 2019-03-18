@@ -894,5 +894,3 @@ The following configuration describes the layout for this environment.
       management_bridge: "br-mgmt"
     ```
     Most important are the internal and external VIPs. These will be our `OpenStack internal/public/admin endpoints all services and clients` will be using. We want our internal VIP to be an IP out of the `br-mgmt` network so all hosts/containers can access it. Our external VIP can be a true public IP or a private IP that you have access to in your larger network.
-
-    
