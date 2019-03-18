@@ -857,3 +857,14 @@ storage_hosts:
           volume_backend_name: LVM_iSCSI
           iscsi_ip_address: "172.29.244.13"
 ```
+## More Details on: `openstack_user_config.yml` YAML file
+
+!!! Info "`cidr_networks:`"
+
+    ```
+    cidr_networks:  
+      container: 172.29.236.0/22
+      tunnel: 172.29.240.0/22
+      storage: 172.29.244.0/22
+    ```
+    `**cidr_networks**`` - /22 networks where our containers, tunnel/overlay and storage network will build from. These can be whatever you need as long as they are large enough and correspond to the IPs you configure on your `br-mgmt` (container), `br-vxlan` (tunnel/overlay) and `br-storage` (storage) interfaces on each host.
