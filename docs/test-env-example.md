@@ -711,152 +711,155 @@ The `/etc/openstack_deploy/openstack_user_config.yml` file defines the environme
 
 The following configuration describes the layout for this environment.
 
-```
----
-cidr_networks:
-  container: 172.29.236.0/22
-  tunnel: 172.29.240.0/22
-  storage: 172.29.244.0/22
+!!! Summary "`/etc/openstack_deploy/openstack_user_config.yml`"
 
-used_ips:
-  - "172.29.236.1,172.29.236.50"
-  - "172.29.240.1,172.29.240.50"
-  - "172.29.244.1,172.29.244.50"
-  - "172.29.248.1,172.29.248.50"
+    ```
+    ---
+    cidr_networks:
+      container: 172.29.236.0/22
+      tunnel: 172.29.240.0/22
+      storage: 172.29.244.0/22
 
-global_overrides:
-  # The internal and external VIP should be different IPs, however they
-  # do not need to be on separate networks.
-  external_lb_vip_address: 192.168.10.10
-  internal_lb_vip_address: 172.29.236.10
-  management_bridge: "br-mgmt"
-  provider_networks:
-    - network:
-        container_bridge: "br-mgmt"
-        container_type: "veth"
-        container_interface: "eth1"
-        ip_from_q: "container"
-        type: "raw"
-        group_binds:
-          - all_containers
-          - hosts
-        is_container_address: true
-    - network:
-        container_bridge: "br-vxlan"
-        container_type: "veth"
-        container_interface: "eth10"
-        ip_from_q: "tunnel"
-        type: "vxlan"
-        range: "1:1000"
-        net_name: "vxlan"
-        group_binds:
-          - neutron_linuxbridge_agent
-    - network:
-        container_bridge: "br-vlan"
-        container_type: "veth"
-        container_interface: "eth12"
-        host_bind_override: "eth12"
-        type: "flat"
-        net_name: "flat"
-        group_binds:
-          - neutron_linuxbridge_agent
-    - network:
-        container_bridge: "br-vlan"
-        container_type: "veth"
-        container_interface: "eth11"
-        type: "vlan"
-        range: "101:200,301:400"
-        net_name: "vlan"
-        group_binds:
-          - neutron_linuxbridge_agent
-    - network:
-        container_bridge: "br-storage"
-        container_type: "veth"
-        container_interface: "eth2"
-        ip_from_q: "storage"
-        type: "raw"
-        group_binds:
-          - glance_api
-          - cinder_api
-          - cinder_volume
-          - nova_compute
+    used_ips:
+      - "172.29.236.1,172.29.236.50"
+      - "172.29.240.1,172.29.240.50"
+      - "172.29.244.1,172.29.244.50"
+      - "172.29.248.1,172.29.248.50"
 
-###
-### Infrastructure
-###
+    global_overrides:
+      # The internal and external VIP should be different IPs, however they
+      # do not need to be on separate networks.
+      external_lb_vip_address: 192.168.10.10
+      internal_lb_vip_address: 172.29.236.10
+      management_bridge: "br-mgmt"
+      provider_networks:
+        - network:
+            container_bridge: "br-mgmt"
+            container_type: "veth"
+            container_interface: "eth1"
+            ip_from_q: "container"
+            type: "raw"
+            group_binds:
+              - all_containers
+              - hosts
+            is_container_address: true
+        - network:
+            container_bridge: "br-vxlan"
+            container_type: "veth"
+            container_interface: "eth10"
+            ip_from_q: "tunnel"
+            type: "vxlan"
+            range: "1:1000"
+            net_name: "vxlan"
+            group_binds:
+              - neutron_linuxbridge_agent
+        - network:
+            container_bridge: "br-vlan"
+            container_type: "veth"
+            container_interface: "eth12"
+            host_bind_override: "eth12"
+            type: "flat"
+            net_name: "flat"
+            group_binds:
+              - neutron_linuxbridge_agent
+        - network:
+            container_bridge: "br-vlan"
+            container_type: "veth"
+            container_interface: "eth11"
+            type: "vlan"
+            range: "101:200,301:400"
+            net_name: "vlan"
+            group_binds:
+              - neutron_linuxbridge_agent
+        - network:
+            container_bridge: "br-storage"
+            container_type: "veth"
+            container_interface: "eth2"
+            ip_from_q: "storage"
+            type: "raw"
+            group_binds:
+              - glance_api
+              - cinder_api
+              - cinder_volume
+              - nova_compute
 
-# galera, memcache, rabbitmq, utility
-shared-infra_hosts:
-  infra1:
-    ip: 172.29.236.11
+    ###
+    ### Infrastructure
+    ###
 
-# repository (apt cache, python packages, etc)
-repo-infra_hosts:
-  infra1:
-    ip: 172.29.236.11
+    # galera, memcache, rabbitmq, utility
+    shared-infra_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-# load balancer
-haproxy_hosts:
-  infra1:
-    ip: 172.29.236.11
+    # repository (apt cache, python packages, etc)
+    repo-infra_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-###
-### OpenStack
-###
+    # load balancer
+    haproxy_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-# keystone
-identity_hosts:
-  infra1:
-    ip: 172.29.236.11
+    ###
+    ### OpenStack
+    ###
 
-# cinder api services
-storage-infra_hosts:
-  infra1:
-    ip: 172.29.236.11
+    # keystone
+    identity_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-# glance
-image_hosts:
-  infra1:
-    ip: 172.29.236.11
+    # cinder api services
+    storage-infra_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-# nova api, conductor, etc services
-compute-infra_hosts:
-  infra1:
-    ip: 172.29.236.11
+    # glance
+    image_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-# heat
-orchestration_hosts:
-  infra1:
-    ip: 172.29.236.11
+    # nova api, conductor, etc services
+    compute-infra_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-# horizon
-dashboard_hosts:
-  infra1:
-    ip: 172.29.236.11
+    # heat
+    orchestration_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-# neutron server, agents (L3, etc)
-network_hosts:
-  infra1:
-    ip: 172.29.236.11
+    # horizon
+    dashboard_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-# nova hypervisors
-compute_hosts:
-  compute1:
-    ip: 172.29.236.12
+    # neutron server, agents (L3, etc)
+    network_hosts:
+      infra1:
+        ip: 172.29.236.11
 
-# cinder storage host (LVM-backed)
-storage_hosts:
-  storage1:
-    ip: 172.29.236.13
-    container_vars:
-      cinder_backends:
-        limit_container_types: cinder_volume
-        lvm:
-          volume_group: cinder-volumes
-          volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
-          volume_backend_name: LVM_iSCSI
-          iscsi_ip_address: "172.29.244.13"
-```
+    # nova hypervisors
+    compute_hosts:
+      compute1:
+        ip: 172.29.236.12
+
+    # cinder storage host (LVM-backed)
+    storage_hosts:
+      storage1:
+        ip: 172.29.236.13
+        container_vars:
+          cinder_backends:
+            limit_container_types: cinder_volume
+            lvm:
+              volume_group: cinder-volumes
+              volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
+              volume_backend_name: LVM_iSCSI
+              iscsi_ip_address: "172.29.244.13"
+    ```
+
 ## More Details on: `openstack_user_config.yml` YAML file
 
 !!! Info "`cidr_networks:`"
@@ -868,3 +871,11 @@ storage_hosts:
       storage: 172.29.244.0/22
     ```
     `cidr_networks` - /22 networks where our containers, tunnel/overlay and storage network will build from. These can be whatever you need as long as they are large enough and correspond to the IPs you configure on your `br-mgmt` (container), `br-vxlan` (tunnel/overlay) and `br-storage` (storage) interfaces on each host.
+
+!!! Info "used_ips:"
+
+    ```
+    used_ips:  
+      - "172.29.236.1,172.29.236.255"
+      - "172.29.240.1,172.29.240.255"
+  -   - "172.29.244.1,172.29.244.255"]
