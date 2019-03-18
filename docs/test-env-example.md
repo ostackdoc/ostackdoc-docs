@@ -133,7 +133,7 @@ You need to apply the same above  for the `compute1` and `storage1` nodes as wel
     We do not cover on how to install the Ubuntu server here. We assume that you already know howto do it.
 
 !!! Important "Language and locales setting"
-    We also recommend setting your locale to en_US.UTF-8. Other locales might work, but they are not tested or supported.
+    We also recommend setting your locale to en_US.UTF-8. Other locales might work, but they are not tested or supported. [If you don't know howto do it](https://help.ubuntu.com/community/Locale)
 
 ### Configure Ubuntu
 
