@@ -126,7 +126,7 @@ You need to apply the same above  for the `compute1` and `storage1` nodes as wel
 !!! Important "Setting root access in Ubuntu"
     During the default installation of `Ubuntu` server we do not have an option for setting `root password`. Suggested `admin` account during the installation is `ostack` with password of your choice. Once the installation is over logging to your admin account and set a password for the `root` account. Also enable `PermitRootLogin yes` in `/etc/ssh/sshd_config` to enable `root` access via `ssh` as we require it during the deployment via Ansible play playbooks
 
-!!! Info "Remaining space of the OS diks"
+!!! Info "Remaining space of the OS disk"
     Keep the remaining space in-allocated since we are going to use them later for few other uses
 
 !!! Note "Installing Ubuntu Server"
