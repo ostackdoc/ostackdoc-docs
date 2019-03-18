@@ -12,12 +12,12 @@ The following figure depicts this test environment and its components.
 
 ![zoomify](img/openstack-test-env-v1.jpg)
 
-## Configuring the network
+## Configuring the Network
 
 OpenStack-Ansible uses bridges to connect physical and logical network interfaces on the host to virtual network interfaces within containers. Target hosts need to be configured with the following network bridges:
 
 
-**Bridge name**| **Best configured on** |	**With a static IP***
+**Bridge name**| **Best configured on** |	**With a static IP**
 -----------|-------------------|-------------------
 `br-mgmt`	   | On every node |	Always
 `br-storage` | On every storage node  |	When component is deployed on metal
@@ -107,7 +107,7 @@ If your have downloaded your Ubuntu server image download the installation ISO f
 
 ### Alternative Ubuntu Server installer
 
-Since we  require advanced networking and storage features such as; LVM, RAID, multipath, vlans, bonds, or re-using existing partitions, you will want to continue to use the alternate installer.
+Since we  require advanced networking and storage features such as; LVM, RAID, multipath, vlans, bonds, or re-using existing partitions, you will want to continue to use the alternate installer. Pannipitiya
 
 [Download the alternate installer](http://cdimage.ubuntu.com/releases/18.04.2/release/ubuntu-18.04.2-server-amd64.iso)
 
@@ -122,6 +122,9 @@ We  recommend you the following partitions scheme for your node installation. We
 `/dev/vg_infra1/lv_root` | `100G` | `EXT4` | `/`
 
 You need to apply the same above  for the `compute1` and `storage1` nodes as well.
+
+!!! Important "Setting root access in Ubuntu"
+    During the default installation of `Ubuntu` server we do not have an option for setting `root password`. Suggested `admin` account during the installation is `ostack` with password of your choice. Once the installation is over logging to your admin account and set a password for the `root` account. Also enable `PermitRootLogin yes` in `/etc/ssh/sshd_config` to enable `root` access via `ssh` as we require it during the deployment via Ansible play playbooks
 
 !!! Info "Remaining space of the OS diks"
     Keep the remaining space in-allocated since we are going to use them later for few other uses
@@ -148,7 +151,8 @@ sudo systemctl reboot
 ```
 **4\.** Ensure that the kernel version is `3.13.0-34-generic` or later:
 ```
-uname -r
+uname -r .
+
 ```
 **5\.** Install additional software packages:
 ```
@@ -166,7 +170,7 @@ sudo echo 'bonding' >> /etc/modules && sudo  echo '8021q' >> /etc/modules
 ```
 sudo systemctl enable chrony
 sudo restart chrony
-```
+``` Pannipitiya
 **9\.** Reboot the host to activate the changes and use the new kernel.
 ```
 sudo systemctl reboot
@@ -174,7 +178,7 @@ sudo systemctl reboot
 
 ##  Configure The Network  Interfaces.
 
-This section describes how to configure network interfaces of your host so that it can be used in OpenStack Ansible deployment.
+This secti Pannipitiyaon describes how to configure network interfaces of your host so that it can be used in OpenStack Ansible deployment.
 
 ### Changing `netplan` to `ifupdown`
 
@@ -346,7 +350,6 @@ iface br-storage inet static
     address 172.29.244.11
     netmask 255.255.252.0
 ```
-
 Reboot the system
 ```
 sudo systemctl reboot
