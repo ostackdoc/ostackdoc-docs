@@ -758,7 +758,7 @@ The following configuration describes the layout for this environment.
             container_type: "veth"
             container_interface: "eth12"
             host_bind_override: "eth12"
-            type: "flat"
+            typenfo: "flat"
             net_name: "flat"
             group_binds:
               - neutron_linuxbridge_agent
@@ -862,7 +862,7 @@ The following configuration describes the layout for this environment.
 
 ## More Details on: `openstack_user_config.yml` YAML file
 
-!!! Info "`cidr_networks:`"
+!!! Note "`cidr_networks:`"
 
     ```
     cidr_networks:  
@@ -870,12 +870,14 @@ The following configuration describes the layout for this environment.
       tunnel: 172.29.240.0/22
       storage: 172.29.244.0/22
     ```
-    `cidr_networks` - /22 networks where our containers, tunnel/overlay and storage network will build from. These can be whatever you need as long as they are large enough and correspond to the IPs you configure on your `br-mgmt` (container), `br-vxlan` (tunnel/overlay) and `br-storage` (storage) interfaces on each host.
+    These are the networks where our containers, tunnel/overlay and storage network will build from. These can be whatever you need as long as they are large enough and correspond to the IPs you configure on your `br-mgmt` (container), `br-vxlan` (tunnel/overlay) and `br-storage` (storage) interfaces on each host.
 
-!!! Info "used_ips:"
+!!! Note "used_ips:"
 
     ```
     used_ips:  
       - "172.29.236.1,172.29.236.255"
       - "172.29.240.1,172.29.240.255"
-  -   - "172.29.244.1,172.29.244.255"]
+      - "172.29.244.1,172.29.244.255"
+    ```
+    Here we define some IPs that we do not want `openstack-ansible` to use. These IPs are already being used on our hosts, other devices or we just want to reserve these for future expansion. When openstack-ansible creates our containers it automatically assigns them an IP out of the container network. Our internal `VIP` and physical hosts already have IPs out of these ranges so we put these in used_ips to avoid duplicate IP problems. Out of a /22 network we reserve the first 255 addresses. Based on your network you might need to add more ranges or even single IPs for network gear etc.
