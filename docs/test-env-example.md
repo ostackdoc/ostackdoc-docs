@@ -867,4 +867,4 @@ storage_hosts:
       tunnel: 172.29.240.0/22
       storage: 172.29.244.0/22
     ```
-    `**cidr_networks**`` - /22 networks where our containers, tunnel/overlay and storage network will build from. These can be whatever you need as long as they are large enough and correspond to the IPs you configure on your `br-mgmt` (container), `br-vxlan` (tunnel/overlay) and `br-storage` (storage) interfaces on each host.
+    `cidr_networks` - /22 networks where our containers, tunnel/overlay and storage network will build from. These can be whatever you need as long as they are large enough and correspond to the IPs you configure on your `br-mgmt` (container), `br-vxlan` (tunnel/overlay) and `br-storage` (storage) interfaces on each host.
