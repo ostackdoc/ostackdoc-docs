@@ -170,7 +170,8 @@ sudo echo 'bonding' >> /etc/modules && sudo  echo '8021q' >> /etc/modules
 ```
 sudo systemctl enable chrony
 sudo restart chrony
-``` Pannipitiya
+```
+
 **9\.** Reboot the host to activate the changes and use the new kernel.
 ```
 sudo systemctl reboot
@@ -191,6 +192,7 @@ cat /etc/netplan/01-netcfg.yaml
 ```
 
 You will get an output like below.
+
 ```
 # This file describes the network interfaces available on your system
 # For more information, see netplan(5).
