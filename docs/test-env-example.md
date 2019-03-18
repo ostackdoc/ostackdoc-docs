@@ -602,7 +602,7 @@ If you can connect and get the shell without authenticating, it is working. SSH 
 
 Logical Volume Manager (LVM) enables a single device to be split into multiple logical volumes that appear as a physical storage device to the operating system. The Block Storage (cinder) service, and LXC containers that optionally run the OpenStack infrastructure, can optionally use LVM for their data storage.
 
-!!! Note
+!!! Note "Configuring LVM"
     OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
 
 1\. To use the optional Block Storage (cinder) service, create an LVM volume group named `cinder-volumes` on the storage host. Specify a metadata size of `2048` when creating the physical volume.  For example:
@@ -680,11 +680,14 @@ sudo apt-get dist-upgrade
 3\. Reboot the host.
 ```
 sudo system reboot
+```
 
 4\. Install additional software packages if they were not installed during the operating system installation:
+
 ```
 sudo apt-get install aptitude build-essential git ntp ntpdate openssh-server python-dev sudo
 ```
+
 ## Install the Source and Dependencies
 
 Install the source and dependencies for the deployment host.
