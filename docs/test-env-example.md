@@ -1010,7 +1010,7 @@ openstack-ansible setup-infrastructure.yml
 openstack-ansible setup-openstack.yml
 
 ```
+
 !!! Success
 
     If you are able to get each playbook finished with 0 errors and then you will have a working Openstack installation.
-  
