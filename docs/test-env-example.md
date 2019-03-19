@@ -369,7 +369,7 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-??? Example "compute1:/etc/network/interfaces"
+???+ Example "compute1:/etc/network/interfaces"
     ```
     # Physical interfaces
     auto eth0
