@@ -259,7 +259,7 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-!!! Example "/etc/network/interfaces"
+!!! Example "infra1:/etc/network/interfaces"
     ```
     # Physical interfaces
     auto eth0
@@ -369,106 +369,109 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-```
-# Physical interfaces
-auto eth0
-iface eth0 inet manual
+!!! Example "compute1:/etc/network/interfaces"
+    ```
+    # Physical interfaces
+    auto eth0
+    iface eth0 inet manual
 
-auto eth1
-iface eth1 inet manual
+    auto eth1
+    iface eth1 inet manual
 
-# Container/Host management VLAN interface
-auto eth0.10
-iface eth0.10 inet manual
-    vlan-raw-device eth0
+    # Container/Host management VLAN interface
+    auto eth0.10
+    iface eth0.10 inet manual
+        vlan-raw-device eth0
 
-# OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
-auto eth1.30
-iface eth1.30 inet manual
-    vlan-raw-device eth1
+    # OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
+    auto eth1.30
+    iface eth1.30 inet manual
+        vlan-raw-device eth1
 
-# Storage network VLAN interface (optional)
-auto eth0.20
-iface eth0.20 inet manual
-    vlan-raw-device eth0
+    # Storage network VLAN interface (optional)
+    auto eth0.20
+    iface eth0.20 inet manual
+        vlan-raw-device eth0
 
-# Container/Host management bridge
-auto br-mgmt
-iface br-mgmt inet static
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth0.10
-    address 172.29.236.12
-    netmask 255.255.252.0
-    gateway 172.29.236.1
-    dns-nameservers 8.8.8.8 8.8.4.4
+    # Container/Host management bridge
+    auto br-mgmt
+    iface br-mgmt inet static
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth0.10
+        address 172.29.236.12
+        netmask 255.255.252.0
+        gateway 172.29.236.1
+        dns-nameservers 8.8.8.8 8.8.4.4
 
-# External Network access for Floating IP
-auto eth1
-face eth1 inet static
-   address 192.168.10.12
-   netmask 255.255.255.0
-   gateway 192.168.10.1
-   dns-nameservers 8.8.8.8 8.8.4.4
+    # External Network access for Floating IP
+    auto eth1
+    face eth1 inet static
+       address 192.168.10.12
+       netmask 255.255.255.0
+       gateway 192.168.10.1
+       dns-nameservers 8.8.8.8 8.8.4.4
 
-# OpenStack Networking VXLAN (tunnel/overlay) bridge
-#
-# The COMPUTE, NETWORK and INFRA nodes must have an IP address
-# on this bridge.
-#
-auto br-vxlan
-iface br-vxlan inet static
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth1.30
-    address 172.29.240.12
-    netmask 255.255.252.0
+    # OpenStack Networking VXLAN (tunnel/overlay) bridge
+    #
+    # The COMPUTE, NETWORK and INFRA nodes must have an IP address
+    # on this bridge.
+    #
+    auto br-vxlan
+    iface br-vxlan inet static
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth1.30
+        address 172.29.240.12
+        netmask 255.255.252.0
 
-# OpenStack Networking VLAN bridge
-auto br-vlan
-iface br-vlan inet manual
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth1
+    # OpenStack Networking VLAN bridge
+    auto br-vlan
+    iface br-vlan inet manual
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth1
 
-# For tenant vlan support, create a veth pair to be used when the neutron
-# agent is not containerized on the compute hosts. 'eth12' is the value used on
-# the host_bind_override parameter of the br-vlan network section of the
-# openstack_user_config example file. The veth peer name must match the value
-# specified on the host_bind_override parameter.
-#
-# When the neutron agent is containerized it will use the container_interface
-# value of the br-vlan network, which is also the same 'eth12' value.
-#
-# Create veth pair, do not abort if already exists
-#    pre-up ip link add br-vlan-veth type veth peer name eth12 || true
-# Set both ends UP
-#    pre-up ip link set br-vlan-veth up
-#    pre-up ip link set eth12 up
-# Delete veth pair on DOWN
-#    post-down ip link del br-vlan-veth || true
-#    bridge_ports eth0 br-vlan-veth
+    # For tenant vlan support, create a veth pair to be used when the neutron
+    # agent is not containerized on the compute hosts. 'eth12' is the value used on
+    # the host_bind_override parameter of the br-vlan network section of the
+    # openstack_user_config example file. The veth peer name must match the value
+    # specified on the host_bind_override parameter.
+    #
+    # When the neutron agent is containerized it will use the container_interface
+    # value of the br-vlan network, which is also the same 'eth12' value.
+    #
+    # Create veth pair, do not abort if already exists
+    #    pre-up ip link add br-vlan-veth type veth peer name eth12 || true
+    # Set both ends UP
+    #    pre-up ip link set br-vlan-veth up
+    #    pre-up ip link set eth12 up
+    # Delete veth pair on DOWN
+    #    post-down ip link del br-vlan-veth || true
+    #    bridge_ports eth0 br-vlan-veth
 
-# Storage bridge (optional)
-#
-# Only the COMPUTE and STORAGE nodes must have an IP address
-# on this bridge. When used by infrastructure nodes, the
-# IP addresses are assigned to containers which use this
-# bridge.Deploying and customizing OpenStack Mitaka with openstack-ansible
-#
-# Storage bridge
-auto br-storage
-iface br-storage inet static
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth0.20
-    address 172.29.244.12
-    netmask 255.255.252.0
-```
+    # Storage bridge (optional)
+    #
+    # Only the COMPUTE and STORAGE nodes must have an IP address
+    # on this bridge. When used by infrastructure nodes, the
+    # IP addresses are assigned to containers which use this
+    # bridge.Deploying and customizing OpenStack Mitaka with openstack-ansible
+    #
+    # Storage bridge
+    auto br-storage
+    iface br-storage inet static
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth0.20
+        address 172.29.244.12
+        netmask 255.255.252.0
+
+    # End
+    ```
 Reboot the system
 
 ```
@@ -483,52 +486,54 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-```
-# Physical interfaces
-auto eth0
-iface eth0 inet manual
+!!! Example "storage1:/etc/network/interfaces"
+    ```
+    # Physical interfaces
+    auto eth0
+    iface eth0 inet manual
 
-auto eth1
-iface eth1 inet manual
+    auto eth1
+    iface eth1 inet manual
 
-# Container/Host management VLAN interface
-auto eth0.10
-iface eth0.10 inet manual
-    vlan-raw-device eth0
+    # Container/Host management VLAN interface
+    auto eth0.10
+    iface eth0.10 inet manual
+        vlan-raw-device eth0
 
-# OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
-auto eth1.30
-iface eth1.30 inet manual
-    vlan-raw-device eth1
+    # OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
+    auto eth1.30
+    iface eth1.30 inet manual
+        vlan-raw-device eth1
 
-# Storage network VLAN interface (optional)
-auto eth0.20
-iface eth0.20 inet manual
-    vlan-raw-device eth0
+    # Storage network VLAN interface (optional)
+    auto eth0.20
+    iface eth0.20 inet manual
+        vlan-raw-device eth0
 
-# Container/Host management bridge
-auto br-mgmt
-iface br-mgmt inet static
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth0.10
-    address 172.29.236.13
-    netmask 255.255.252.0
-    gateway 172.29.236.1
-    dns-nameservers 8.8.8.8 8.8.4.4
+    # Container/Host management bridge
+    auto br-mgmt
+    iface br-mgmt inet static
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth0.10
+        address 172.29.236.13
+        netmask 255.255.252.0
+        gateway 172.29.236.1
+        dns-nameservers 8.8.8.8 8.8.4.4
 
-# Storage bridge
-auto br-storage
-iface br-storage inet static
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth0.20
-    address 172.29.244.13
-    netmask 255.255.252.0
-```
+    # Storage bridge
+    auto br-storage
+    iface br-storage inet static
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth0.20
+        address 172.29.244.13
+        netmask 255.255.252.0
 
+    # End
+    ```
 Reboot the system
 
 ```
