@@ -950,3 +950,10 @@ The following configuration describes the layout for this environment.
             - cinder_volume
             - nova_compute
     ```
+    `provider_networks` - This is where you can modify how you want your `OpenStack` networking to be implemented. The `group_binds` correspond to  Ansible groups so it knows which containers need which networks.
+
+    The first network in this section tells `openstack-ansible` to give an `eth1` interface to all our LXC containers out of the `container` network we defined in the `cidr_networks` section above. This will be attached to our `br-mgmt` interface on our hosts.
+
+    The second network is for our tenants to use `VXLAN` networks. It will give our neutron agents container an `eth10` interface if agents are running inside an `lxc` container.
+
+    The third network is pretty important and there are a few ways you can set this up. For my use, even though this network is connecting to our br-vlan, I want it to be a flat:flat network. Another way you can do this in a production environment is to use VLANs. Say I wanted 20 tenant VLAN networks, the VLANs my network engineers have given me are 110 through 120 and 440 through 450.
