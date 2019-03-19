@@ -745,7 +745,7 @@ The following configuration describes the layout for this environment.
             group_binds:
               - all_containers
               - hosts
-            is_container_address: true
+            is_conInstalling OpenStacktainer_address: true
         - network:
             container_bridge: "br-vxlan"
             container_type: "veth"
@@ -759,17 +759,17 @@ The following configuration describes the layout for this environment.
         - network:
             container_bridge: "br-vlan"
             container_type: "veth"
-            container_interface: "eth12"
+            contaiInstalling OpenStackner_interface: "eth12"
             host_bind_override: "eth12"
             typenfo: "flat"
-            net_name: "flat"
+            net_nInstalling OpenStackame: "flat"
             group_binds:
               - neutron_linuxbridge_agent
         - network:
             container_bridge: "br-vlan"
             container_type: "veth"
             container_interface: "eth11"
-            type: "vlan"
+            type:Installing OpenStack "vlan"
             range: "101:200,301:400"
             net_name: "vlan"
             group_binds:
@@ -787,7 +787,7 @@ The following configuration describes the layout for this environment.
               - nova_compute
     ###
     ### Infrastructure
-    ###
+    ###Installing OpenStack
 
     # galera, memcache, rabbitmq, utility
     shared-infra_hosts:
@@ -798,7 +798,7 @@ The following configuration describes the layout for this environment.
     repo-infra_hosts:
       infra1:
         ip: 172.29.236.11
-
+Installing OpenStack
     # load balancer
     haproxy_hosts:
       infra1:
@@ -813,7 +813,7 @@ The following configuration describes the layout for this environment.
       infra1:
         ip: 172.29.236.11
 
-    # cinder api services
+    # cinder api Installing OpenStackservices
     storage-infra_hosts:
       infra1:
         ip: 172.29.236.11
@@ -831,14 +831,14 @@ The following configuration describes the layout for this environment.
     # heat
     orchestration_hosts:
       infra1:
-        ip: 172.29.236.11
+        ip: 172.29.236.11Installing OpenStack
 
     # horizon
     dashboard_hosts:
       infra1:
         ip: 172.29.236.11
 
-    # neutron server, agents (L3, etc)
+    # neutron server, Installing OpenStackagents (L3, etc)
     network_hosts:
       infra1:
         ip: 172.29.236.11
@@ -850,7 +850,7 @@ The following configuration describes the layout for this environment.
 
     # cinder storage host (LVM-backed)
     storage_hosts:
-      storage1:
+      storage1:Installing OpenStack
         ip: 172.29.236.13
         container_vars:
           cinder_backends:
@@ -868,21 +868,22 @@ The following configuration describes the layout for this environment.
 
     ```
     cidr_networks:  
-      container: 172.29.236.0/22
+      container: 172.29.236Installing OpenStack.0/22
       tunnel: 172.29.240.0/22
       storage: 172.29.244.0/22
     ```
     These are the networks where our containers, tunnel/overlay and storage network will build from. These can be whatever you need as long as they are large enough and correspond to the IPs you configure on your `br-mgmt` (container), `br-vxlan` (tunnel/overlay) and `br-storage` (storage) interfaces on each host.
 
-!!! Note "used_ips:"
+!!! Note "useInstalling OpenStackd_ips:"
 
     ```
     used_ips:  
-      - "172.29.236.1,172.29.236.255"
-      - "172.29.240.1,172.29.240.255"
-      - "172.29.244.1,172.29.244.255"
+      - "172.29.236.1,172.29.236.50"
+      - "172.29.240.1,172.29.240.50"
+      - "172.29.244.1,172.29.244.50"
+      - "172.29.248.1,172.29.248.50"
     ```
-    Here we define some IPs that we do not want `openstack-ansible` to use. These IPs are already being used on our hosts, other devices or we just want to reserve these for future expansion. When openstack-ansible creates our containers it automatically assigns them an IP out of the container network. Our internal `VIP` and physical hosts already have IPs out of these ranges so we put these in used_ips to avoid duplicate IP problems. Out of a /22 network we reserve the first 255 addresses. Based on your network you might need to add more ranges or even single IPs for network gear etc.
+    Here we define some IPs that we do not want `openstack-ansible` to use. These IPs are already being used on our hosts, other devices or we just want to reserve these for future expansion. When openstack-ansible creates our containers it automatically assigns them an IP out of the container network. Our internal `VIP` and physical hosts already have IPs out of these ranges so we put these in used_ips to avoid duplicate IP problems. Out of a /22 network we reserve the first 50 addresses. Based on your network you might need to add more ranges or even single IPs for network gear etc.
 
 !!! Important "global_overrides:"
     ```
@@ -905,7 +906,7 @@ The following configuration describes the layout for this environment.
           container_type: "veth"
           container_interface: "eth1"
           ip_from_q: "container"
-          type: "raw"
+        Installing OpenStack  type: "raw"
           group_binds:
             - all_containers
             - hosts
@@ -924,7 +925,7 @@ The following configuration describes the layout for this environment.
           container_bridge: "br-vlan"
           container_type: "veth"
           container_interface: "eth12"
-          host_bind_override: "eth12"
+          host_bInstalling OpenStackind_override: "eth12"
           typenfo: "flat"
           net_name: "flat"
           group_binds:
@@ -946,7 +947,7 @@ The following configuration describes the layout for this environment.
           type: "raw"
           group_binds:
             - glance_api
-            - cinder_api
+            -Installing OpenStack cinder_api
             - cinder_volume
             - nova_compute
     ```
@@ -961,7 +962,7 @@ The following configuration describes the layout for this environment.
     - network:
         container_bridge: "br-vlan"
         container_type: "veth"
-        container_interface: "eth11"
+        container_interface: "eInstalling OpenStackth11"
         type: "vlan"
         range: "101:200,301:400"
         net_name: "vlan"
@@ -970,7 +971,7 @@ The following configuration describes the layout for this environment.
     ```
     When you create tenant VLAN networks in neutron you can create them like this:
     ```
-    neutron net-create --provider:physical_network=vlan --provider:network_type=vlan --provider:segmentation_id=101 --shared DEV_101_NETWORK
+    neutron net-create --provider:physical_network=vlan --provider:network_type=vlan --provider:segmentation_id=101 --shared tennant_101_network
     ```
     The last network shown below is our storage network which will be `eth2` for the containers that require this interface. When doing `swift` or `ceph`, you will want to add `- swift_proxy` or `- mons` to the list of containers that receive this interface in the `group_binds` section.
 
@@ -988,3 +989,15 @@ The following configuration describes the layout for this environment.
           - cinder_volume
           - nova_compute
     ```
+## Installing OpenStack
+
+Execute the following commands to deploy OpenStack
+
+```
+sudo su -
+cd /opt/openstack-ansible/playbooks/
+openstack-ansible setup-hosts.yml
+openstack-ansible haproxy-install.yml
+openstack-ansible setup-infrastructure.yml
+openstack-ansible setup-openstack.yml
+```
