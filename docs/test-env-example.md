@@ -896,3 +896,57 @@ The following configuration describes the layout for this environment.
       management_bridge: "br-mgmt"
     ```
     Most important are the internal and external VIPs. These will be our `OpenStack internal/public/admin endpoints` all services and clients` will be using. We want our internal VIP to be an IP out of the `br-mgmt` network so all hosts/containers can access it. Our external VIP can be a true public IP or a private IP that you have access to in your larger network.
+
+!!! Note "provider_networks"
+    ```
+    provider_networks:
+      - network:
+          container_bridge: "br-mgmt"
+          container_type: "veth"
+          container_interface: "eth1"
+          ip_from_q: "container"
+          type: "raw"
+          group_binds:
+            - all_containers
+            - hosts
+          is_container_address: true
+      - network:
+          container_bridge: "br-vxlan"
+          container_type: "veth"
+          container_interface: "eth10"
+          ip_from_q: "tunnel"
+          type: "vxlan"
+          range: "1:1000"
+          net_name: "vxlan"
+          group_binds:
+            - neutron_linuxbridge_agent
+      - network:
+          container_bridge: "br-vlan"
+          container_type: "veth"
+          container_interface: "eth12"
+          host_bind_override: "eth12"
+          typenfo: "flat"
+          net_name: "flat"
+          group_binds:
+            - neutron_linuxbridge_agent
+      - network:
+          container_bridge: "br-vlan"
+          container_type: "veth"
+          container_interface: "eth11"
+          type: "vlan"
+          range: "101:200,301:400"
+          net_name: "vlan"
+          group_binds:
+            - neutron_linuxbridge_agent
+      - network:
+          container_bridge: "br-storage"
+          container_type: "veth"
+          container_interface: "eth2"
+          ip_from_q: "storage"
+          type: "raw"
+          group_binds:
+            - glance_api
+            - cinder_api
+            - cinder_volume
+            - nova_compute
+    ```
