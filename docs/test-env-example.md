@@ -712,7 +712,6 @@ The `/etc/openstack_deploy/openstack_user_config.yml` file defines the environme
 The following configuration describes the layout for this environment.
 
 !!! Example "`/etc/openstack_deploy/openstack_user_config.yml`"
-
     ```
     ---
     cidr_networks:
@@ -798,8 +797,7 @@ The following configuration describes the layout for this environment.
     repo-infra_hosts:
       infra1:
         ip: 172.29.236.11
-Installing OpenStack
-    # load balancer
+    # Installing OpenStack load balancer
     haproxy_hosts:
       infra1:
         ip: 172.29.236.11
@@ -860,6 +858,8 @@ Installing OpenStack
               volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
               volume_backend_name: LVM_iSCSI
               iscsi_ip_address: "172.29.244.13"
+
+    # End-of-file
     ```
 
 ## More Details on: `openstack_user_config.yml` YAML file
@@ -1002,5 +1002,3 @@ openstack-ansible setup-infrastructure.yml
 openstack-ansible setup-openstack.yml
 ```
 ## The Demo Tenant
-
- 
