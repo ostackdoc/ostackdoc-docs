@@ -259,99 +259,102 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-```
-# Physical interfaces
-auto eth0
-iface eth0 inet manual
+!!! Example "/etc/network/interfaces"
+    ```
+    # Physical interfaces
+    auto eth0
+    iface eth0 inet manual
 
-auto eth1
-iface eth1 inet manual
+    auto eth1
+    iface eth1 inet manual
 
-# Container/Host management VLAN interface
-auto eth0.10
-iface eth0.10 inet manual
-    vlan-raw-device eth0
+    # Container/Host management VLAN interface
+    auto eth0.10
+    iface eth0.10 inet manual
+        vlan-raw-device eth0
 
-# OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
-auto eth1.30
-iface eth1.30 inet manual
-    vlan-raw-device eth1
+    # OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
+    auto eth1.30
+    iface eth1.30 inet manual
+        vlan-raw-device eth1
 
-# Storage network VLAN interface (optional)
-auto eth0.20
-iface eth0.20 inet manual
-    vlan-raw-device eth0
+    # Storage network VLAN interface (optional)
+    auto eth0.20
+    iface eth0.20 inet manual
+        vlan-raw-device eth0
 
-# Container/Host management bridge
-auto br-mgmt
-iface br-mgmt inet static
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth0.10
-    address 172.29.236.11
-    netmask 255.255.252.0
-    dns-nameservers 8.8.8.8 8.8.4.4
+    # Container/Host management bridge
+    auto br-mgmt
+    iface br-mgmt inet static
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth0.10
+        address 172.29.236.11
+        netmask 255.255.252.0
+        dns-nameservers 8.8.8.8 8.8.4.4
 
-# Bind the Internal LB VIP as we run haproxy without keepalived
-auto br-mgmt:0
-iface br-mgmt:0 inet static
-    address 172.29.236.10
-    netmask 255.255.252.0
+    # Bind the Internal LB VIP as we run haproxy without keepalived
+    auto br-mgmt:0
+    iface br-mgmt:0 inet static
+        address 172.29.236.10
+        netmask 255.255.252.0
 
-# Bind the External LB VIP as we run haproxy without keepalived
-auto eth1:0
-iface eth1:0 inet static
-    address 192.168.10.10
-    netmask 255.255.255.0
+    # Bind the External LB VIP as we run haproxy without keepalived
+    auto eth1:0
+    iface eth1:0 inet static
+        address 192.168.10.10
+        netmask 255.255.255.0
 
-# External Network access for Floating IP
-auto eth1
-face eth1 inet static
-   address 192.168.10.11
-   netmask 255.255.255.0
-   gateway 192.168.10.1
-   dns-nameservers 8.8.8.8 8.8.4.4
+    # External Network access for Floating IP
+    auto eth1
+    face eth1 inet static
+       address 192.168.10.11
+       netmask 255.255.255.0
+       gateway 192.168.10.1
+       dns-nameservers 8.8.8.8 8.8.4.4
 
-# OpenStack Networking VXLAN (tunnel/overlay) bridge
-#
-# The COMPUTE, NETWORK and INFRA nodes must have an IP address
-# on this bridge.
-#
-auto br-vxlan
-iface br-vxlan inet static
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth1.30
-    address 172.29.240.11
-    netmask 255.255.252.0
+    # OpenStack Networking VXLAN (tunnel/overlay) bridge
+    #
+    # The COMPUTE, NETWORK and INFRA nodes must have an IP address
+    # on this bridge.
+    #
+    auto br-vxlan
+    iface br-vxlan inet static
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth1.30
+        address 172.29.240.11
+        netmask 255.255.252.0
 
-# OpenStack Networking VLAN bridge
-auto br-vlan
-iface br-vlan inet manual
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth1
+    # OpenStack Networking VLAN bridge
+    auto br-vlan
+    iface br-vlan inet manual
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth1
 
-# Storage bridge (optional)
-#
-# Only the COMPUTE and STORAGE nodes must have an IP address
-# on this bridge. When used by infrastructure nodes, the
-# IP addresses are assigned to containers which use this
-# bridge.Deploying and customizing OpenStack Mitaka with openstack-ansible
-#
-# Storage bridge
-auto br-storage
-iface br-storage inet static
-    bridge_stp off
-    bridge_waitport 0
-    bridge_fd 0
-    bridge_ports eth0.20
-    address 172.29.244.11
-    netmask 255.255.252.0
-```
+    # Storage bridge (optional)
+    #
+    # Only the COMPUTE and STORAGE nodes must have an IP address
+    # on this bridge. When used by infrastructure nodes, the
+    # IP addresses are assigned to containers which use this
+    # bridge.Deploying and customizing OpenStack Mitaka with openstack-ansible
+    #
+    # Storage bridge
+    auto br-storage
+    iface br-storage inet static
+        bridge_stp off
+        bridge_waitport 0
+        bridge_fd 0
+        bridge_ports eth0.20
+        address 172.29.244.11
+        netmask 255.255.252.0
+
+    # End
+    ```
 Reboot the system
 ```
 sudo systemctl reboot
