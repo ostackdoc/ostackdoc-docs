@@ -833,7 +833,7 @@ The following configuration describes the layout for this environment.
     # heat
     orchestration_hosts:
       infra1:
-        ip: 172.29.236.11Installing OpenStack
+        ip: 172.29.236.11
 
     # horizon
     dashboard_hosts:
@@ -852,7 +852,7 @@ The following configuration describes the layout for this environment.
 
     # cinder storage host (LVM-backed)
     storage_hosts:
-      storage1:Installing OpenStack
+      storage1:
         ip: 172.29.236.13
         container_vars:
           cinder_backends:
@@ -862,6 +862,10 @@ The following configuration describes the layout for this environment.
               volume_driver: cinder.volume.drivers.lvm.LVMVolumeDriver
               volume_backend_name: LVM_iSCSI
               iscsi_ip_address: "172.29.244.13"
+
+    neutron_plugin_base:  
+      - router
+      - metering
 
     # End-of-file
     ```
@@ -1004,5 +1008,9 @@ openstack-ansible setup-hosts.yml
 openstack-ansible haproxy-install.yml
 openstack-ansible setup-infrastructure.yml
 openstack-ansible setup-openstack.yml
+
 ```
-## The Demo Tenant
+!!! Success
+
+    If you are able to get each playbook finished with 0 errors and then you will have a working Openstack installation.
+  
