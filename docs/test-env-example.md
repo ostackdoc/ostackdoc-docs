@@ -259,7 +259,7 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-!!! Example "infra1:/etc/network/interfaces"
+???  Example "infra1:/etc/network/interfaces"
     ```
     # Physical interfaces
     auto eth0
@@ -369,7 +369,7 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-!!! Example "compute1:/etc/network/interfaces"
+??? Example "compute1:/etc/network/interfaces"
     ```
     # Physical interfaces
     auto eth0
@@ -486,7 +486,7 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-!!! Example "storage1:/etc/network/interfaces"
+??? Example "storage1:/etc/network/interfaces"
     ```
     # Physical interfaces
     auto eth0
@@ -555,12 +555,8 @@ Press `Enter` key to create our keys without a passphrase
 
 You will get an output like below.
 
-```Note
-
-OpenStack-Ansible automatically configures LVM on the nodes, and overrides any existing LVM configuration. If you had a customized LVM configuration, edit the generated configuration file as needed.
-
-
-root@guru:~# ssh-keygen -t rsa
+```
+root@infra1:~# ssh-keygen -t rsa
 Generating public/private rsa key pair.
 Enter file in which to save the key (/root/.ssh/id_rsa):
 Enter passphrase (empty for no passphrase):
