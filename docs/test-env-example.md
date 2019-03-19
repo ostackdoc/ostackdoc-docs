@@ -259,7 +259,7 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-???  Example "infra1:/etc/network/interfaces"
+!!! Example "infra1:/etc/network/interfaces"
     ```
     # Physical interfaces
     auto eth0
@@ -369,7 +369,7 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-???+ Example "compute1:/etc/network/interfaces"
+!!! Example "compute1:/etc/network/interfaces"
     ```
     # Physical interfaces
     auto eth0
@@ -486,7 +486,7 @@ sudo nano /etc/network/interfaces
 ```
 Add the the following configurations.
 
-??? Example "storage1:/etc/network/interfaces"
+!!! Example "storage1:/etc/network/interfaces"
     ```
     # Physical interfaces
     auto eth0
