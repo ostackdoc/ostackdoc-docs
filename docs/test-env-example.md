@@ -729,8 +729,8 @@ The following configuration describes the layout for this environment.
     global_overrides:
       # The internal and external VIP should be different IPs, however they
       # do not need to be on separate networks.
-      # In this confuration osatest.nic.lk should  have an A record
-      # pointing to 192.168.10.10
+      # In this configuration osatest.nic.lk should  have an A record
+      # pointing to IP 192.168.10.10
 
       external_lb_vip_address: osatest.nic.lk
       internal_lb_vip_address: 172.29.236.10
@@ -884,13 +884,15 @@ The following configuration describes the layout for this environment.
     ```
     Here we define some IPs that we do not want `openstack-ansible` to use. These IPs are already being used on our hosts, other devices or we just want to reserve these for future expansion. When openstack-ansible creates our containers it automatically assigns them an IP out of the container network. Our internal `VIP` and physical hosts already have IPs out of these ranges so we put these in used_ips to avoid duplicate IP problems. Out of a /22 network we reserve the first 255 addresses. Based on your network you might need to add more ranges or even single IPs for network gear etc.
 
-!!! Note "global_overrides:"
+!!! Important "global_overrides:"
     ```
     global_overrides:
       # The internal and external VIP should be different IPs, however they
-      # do not need to be on separate networks.
-      external_lb_vip_address: 192.168.10.10
+      # do not need to be on separate networks. You need create an A record
+      # osatest.nic.lk pointing to IP 192.168.10.10 in your DNS server
+      #
+      external_lb_vip_address: osatest.nic.lk
       internal_lb_vip_address: 172.29.236.10
       management_bridge: "br-mgmt"
     ```
-    Most important are the internal and external VIPs. These will be our `OpenStack internal/public/admin endpoints all services and clients` will be using. We want our internal VIP to be an IP out of the `br-mgmt` network so all hosts/containers can access it. Our external VIP can be a true public IP or a private IP that you have access to in your larger network.
+    Most important are the internal and external VIPs. These will be our `OpenStack internal/public/admin endpoints` all services and clients` will be using. We want our internal VIP to be an IP out of the `br-mgmt` network so all hosts/containers can access it. Our external VIP can be a true public IP or a private IP that you have access to in your larger network.
