@@ -956,7 +956,7 @@ The following configuration describes the layout for this environment.
 
     The second network is for our tenants to use `VXLAN` networks. It will give our neutron agents container an `eth10` interface if agents are running inside an `lxc` container.
 
-    The third network is **pretty important** and there are a few ways you can set this up. For your use, even though this network is connecting to our `br-vlan`, you can make it to be a `flat:flat` network. Another way you can do this in a production environment is to use VLANs. Say If you wanted  200 tenant VLAN networks, the VLANs  that  network engineers have given to you are 101 through 200 and 301 through 400 as per the configuration shown below.
+    The third network is **pretty important** and there are a few ways you can set this up. For your use, even though this network is connecting to our `br-vlan`, you can make it to be a `flat:flat` network. Another way you can do this in a production environment is to use VLANs. Say If you wanted  200 tenant VLAN networks, the VLANs  that  network engineers have given to you are `101 through 200` and `301 through 400` as per the configuration shown below.
     ```
     - network:
         container_bridge: "br-vlan"
@@ -971,4 +971,20 @@ The following configuration describes the layout for this environment.
     When you create tenant VLAN networks in neutron you can create them like this:
     ```
     neutron net-create --provider:physical_network=vlan --provider:network_type=vlan --provider:segmentation_id=101 --shared DEV_101_NETWORK
+    ```
+    The last network shown below is our storage network which will be `eth2` for the containers that require this interface. When doing `swift` or `ceph`, you will want to add `- swift_proxy` or `- mons` to the list of containers that receive this interface in the `group_binds` section.
+
+
+    ```
+    - network:
+        container_bridge: "br-storage"
+        container_type: "veth"
+        container_interface: "eth2"
+        ip_from_q: "storage"
+        type: "raw"
+        group_binds:
+          - glance_api
+          - cinder_api
+          - cinder_volume
+          - nova_compute
     ```
