@@ -956,4 +956,19 @@ The following configuration describes the layout for this environment.
 
     The second network is for our tenants to use `VXLAN` networks. It will give our neutron agents container an `eth10` interface if agents are running inside an `lxc` container.
 
-    The third network is pretty important and there are a few ways you can set this up. For my use, even though this network is connecting to our br-vlan, I want it to be a flat:flat network. Another way you can do this in a production environment is to use VLANs. Say I wanted 20 tenant VLAN networks, the VLANs my network engineers have given me are 110 through 120 and 440 through 450.
+    The third network is **pretty important** and there are a few ways you can set this up. For your use, even though this network is connecting to our `br-vlan`, you can make it to be a `flat:flat` network. Another way you can do this in a production environment is to use VLANs. Say If you wanted  200 tenant VLAN networks, the VLANs  that  network engineers have given to you are 101 through 200 and 301 through 400 as per the configuration shown below.
+    ```
+    - network:
+        container_bridge: "br-vlan"
+        container_type: "veth"
+        container_interface: "eth11"
+        type: "vlan"
+        range: "101:200,301:400"
+        net_name: "vlan"
+        group_binds:
+          - neutron_linuxbridge_agent
+    ```
+    When you create tenant VLAN networks in neutron you can create them like this:
+    ```
+    neutron net-create --provider:physical_network=vlan --provider:network_type=vlan --provider:segmentation_id=101 --shared DEV_101_NETWORK
+    ```
